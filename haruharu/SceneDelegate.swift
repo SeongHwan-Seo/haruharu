@@ -18,12 +18,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let isFirst = UserDefaults.standard.bool(forKey: "isFirst")
         
-        let mainViewController = MainViewController()
-        let onboardingViewController = OnboardingViewController()
-        if isFirst { 
+        
+        
+        if isFirst {
+            let mainViewController = MainViewController()
             window?.rootViewController = mainViewController
         } else {
-            window?.rootViewController = onboardingViewController
+            let onboardingViewController = OnboardingViewController()
+            let navigationController = UINavigationController(rootViewController: onboardingViewController)
+            navigationController.navigationBar.tintColor = .fgTintColor
+            navigationController.navigationBar.topItem?.title = ""
+            window?.rootViewController = navigationController
         }
         
         window?.makeKeyAndVisible()

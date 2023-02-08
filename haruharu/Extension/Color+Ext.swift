@@ -10,5 +10,7 @@ import UIKit
 
 extension UIColor {
     static let btnBgColor = UIColor(named: "BtnBgColor")
-    
+    static let fgTintColor = UIColor(named: "FgTintColor")
+    static let textFieldBgColor = UIColor(named: "TextFieldBgColor")
+    static let bgColor = UIColor(named: "BgColor")
 }

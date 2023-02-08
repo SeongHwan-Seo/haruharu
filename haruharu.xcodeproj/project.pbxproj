@@ -13,6 +13,9 @@
 		581BD9D12991134800080469 /* NanumGothicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9CE2991134800080469 /* NanumGothicExtraBold.ttf */; };
 		581BD9D22991134800080469 /* NanumGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9CF2991134800080469 /* NanumGothic.ttf */; };
 		581BD9D32991134800080469 /* NanumGothicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9D02991134800080469 /* NanumGothicBold.ttf */; };
+		585462802992047E00655F12 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 5854627F2992047E00655F12 /* Lottie */; };
+		585462832992065100655F12 /* challenge.json in Resources */ = {isa = PBXBuildFile; fileRef = 585462822992065100655F12 /* challenge.json */; };
+		58757796299396FF0080D4B1 /* DaysButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58757795299396FF0080D4B1 /* DaysButton.swift */; };
 		588F8A56298A3FA000DDB306 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588F8A55298A3FA000DDB306 /* AppDelegate.swift */; };
 		588F8A58298A3FA000DDB306 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588F8A57298A3FA000DDB306 /* SceneDelegate.swift */; };
 		588F8A5F298A3FA100DDB306 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 588F8A5E298A3FA100DDB306 /* Assets.xcassets */; };
@@ -22,6 +25,9 @@
 		588F8A70298A709500DDB306 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 588F8A6F298A709500DDB306 /* RxCocoa */; };
 		588F8A72298A709500DDB306 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 588F8A71298A709500DDB306 /* RxRelay */; };
 		588F8A74298A709500DDB306 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 588F8A73298A709500DDB306 /* RxSwift */; };
+		58D392E22992168C002FA01A /* OnboardingLastViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D392E12992168C002FA01A /* OnboardingLastViewController.swift */; };
+		58D392E429922F05002FA01A /* UITextField+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D392E329922F05002FA01A /* UITextField+Ext.swift */; };
+		58D392E629923307002FA01A /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58D392E529923307002FA01A /* UIViewController+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +37,8 @@
 		581BD9CE2991134800080469 /* NanumGothicExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothicExtraBold.ttf; sourceTree = "<group>"; };
 		581BD9CF2991134800080469 /* NanumGothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothic.ttf; sourceTree = "<group>"; };
 		581BD9D02991134800080469 /* NanumGothicBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothicBold.ttf; sourceTree = "<group>"; };
+		585462822992065100655F12 /* challenge.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = challenge.json; sourceTree = "<group>"; };
+		58757795299396FF0080D4B1 /* DaysButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysButton.swift; sourceTree = "<group>"; };
 		588F8A52298A3FA000DDB306 /* haruharu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haruharu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		588F8A55298A3FA000DDB306 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		588F8A57298A3FA000DDB306 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -38,6 +46,9 @@
 		588F8A61298A3FA100DDB306 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		588F8A63298A3FA100DDB306 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		588F8A69298A643300DDB306 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		58D392E12992168C002FA01A /* OnboardingLastViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingLastViewController.swift; sourceTree = "<group>"; };
+		58D392E329922F05002FA01A /* UITextField+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+Ext.swift"; sourceTree = "<group>"; };
+		58D392E529923307002FA01A /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				585462802992047E00655F12 /* Lottie in Frameworks */,
 				588F8A72298A709500DDB306 /* RxRelay in Frameworks */,
 				588F8A70298A709500DDB306 /* RxCocoa in Frameworks */,
 				588F8A74298A709500DDB306 /* RxSwift in Frameworks */,
@@ -58,6 +70,7 @@
 		581BD9C629910B1D00080469 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				58757793299396D80080D4B1 /* Common */,
 				581BD9C729910B2400080469 /* Onboarding */,
 			);
 			path = Views;
@@ -67,6 +80,7 @@
 			isa = PBXGroup;
 			children = (
 				581BD9C42990DD2100080469 /* OnboardingViewController.swift */,
+				58D392E12992168C002FA01A /* OnboardingLastViewController.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -76,6 +90,8 @@
 			children = (
 				581BD9C929910D6800080469 /* Color+Ext.swift */,
 				581BD9CB29910E3800080469 /* UIButton+Ext.swift */,
+				58D392E329922F05002FA01A /* UITextField+Ext.swift */,
+				58D392E529923307002FA01A /* UIViewController+Ext.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -88,6 +104,30 @@
 				581BD9CE2991134800080469 /* NanumGothicExtraBold.ttf */,
 			);
 			path = Fonts;
+			sourceTree = "<group>";
+		};
+		585462812992061500655F12 /* Lotties */ = {
+			isa = PBXGroup;
+			children = (
+				585462822992065100655F12 /* challenge.json */,
+			);
+			path = Lotties;
+			sourceTree = "<group>";
+		};
+		58757793299396D80080D4B1 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				58757794299396EA0080D4B1 /* Button */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		58757794299396EA0080D4B1 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				58757795299396FF0080D4B1 /* DaysButton.swift */,
+			);
+			path = Button;
 			sourceTree = "<group>";
 		};
 		588F8A49298A3FA000DDB306 = {
@@ -109,6 +149,7 @@
 		588F8A54298A3FA000DDB306 /* haruharu */ = {
 			isa = PBXGroup;
 			children = (
+				585462812992061500655F12 /* Lotties */,
 				581BD9CD2991124700080469 /* Fonts */,
 				581BD9C829910D4200080469 /* Extension */,
 				581BD9C629910B1D00080469 /* Views */,
@@ -143,6 +184,7 @@
 				588F8A6F298A709500DDB306 /* RxCocoa */,
 				588F8A71298A709500DDB306 /* RxRelay */,
 				588F8A73298A709500DDB306 /* RxSwift */,
+				5854627F2992047E00655F12 /* Lottie */,
 			);
 			productName = haruharu;
 			productReference = 588F8A52298A3FA000DDB306 /* haruharu.app */;
@@ -175,6 +217,7 @@
 			packageReferences = (
 				588F8A6B298A708300DDB306 /* XCRemoteSwiftPackageReference "SnapKit" */,
 				588F8A6E298A709500DDB306 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				5854627E2992047D00655F12 /* XCRemoteSwiftPackageReference "lottie-spm" */,
 			);
 			productRefGroup = 588F8A53298A3FA000DDB306 /* Products */;
 			projectDirPath = "";
@@ -195,6 +238,7 @@
 				588F8A62298A3FA100DDB306 /* LaunchScreen.storyboard in Resources */,
 				581BD9D32991134800080469 /* NanumGothicBold.ttf in Resources */,
 				588F8A5F298A3FA100DDB306 /* Assets.xcassets in Resources */,
+				585462832992065100655F12 /* challenge.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -208,9 +252,13 @@
 				588F8A56298A3FA000DDB306 /* AppDelegate.swift in Sources */,
 				588F8A58298A3FA000DDB306 /* SceneDelegate.swift in Sources */,
 				588F8A6A298A643300DDB306 /* MainViewController.swift in Sources */,
+				58D392E429922F05002FA01A /* UITextField+Ext.swift in Sources */,
 				581BD9C52990DD2100080469 /* OnboardingViewController.swift in Sources */,
 				581BD9CA29910D6800080469 /* Color+Ext.swift in Sources */,
 				581BD9CC29910E3800080469 /* UIButton+Ext.swift in Sources */,
+				58D392E22992168C002FA01A /* OnboardingLastViewController.swift in Sources */,
+				58757796299396FF0080D4B1 /* DaysButton.swift in Sources */,
+				58D392E629923307002FA01A /* UIViewController+Ext.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +478,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5854627E2992047D00655F12 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 		588F8A6B298A708300DDB306 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -449,6 +505,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5854627F2992047E00655F12 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5854627E2992047D00655F12 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
 		588F8A6C298A708300DDB306 /* SnapKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 588F8A6B298A708300DDB306 /* XCRemoteSwiftPackageReference "SnapKit" */;
