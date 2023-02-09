@@ -156,7 +156,8 @@ extension OnboardingLastViewController {
             })
             .disposed(by: disposeBag)
         hundredBtn.rx.tap
-            .subscribe(onNext: { [weak self] _ in
+            .subscribe(onNext: { [weak self] s in
+                print(s)
                 self?.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
             })
             .disposed(by: disposeBag)

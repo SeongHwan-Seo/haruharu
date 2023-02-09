@@ -63,7 +63,7 @@ final class DaysButton: UIButton {
     }
     
     private func unselectConfiguration() {
-        setTitleColor(.fgTintColor, for: .normal)
+        setTitleColor(.white, for: .normal)
         setBackgroundColor(.textFieldBgColor,cornerRadius: 12, for: .normal)
     }
     
