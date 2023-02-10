@@ -14,7 +14,7 @@ import RxCocoa
 
 class OnboardingLastViewController: UIViewController {
     let disposeBag = DisposeBag()
-    
+    var selectedDay = 0
     
     lazy var nickNameLabel: UILabel = {
         let label = UILabel()
@@ -44,6 +44,7 @@ class OnboardingLastViewController: UIViewController {
         btn.titleLabel?.font = UIFont(name: "NanumGothicBold", size: 14)
         btn.setTitleColor(.white, for: .normal)
         btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .normal)
+        //btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .disabled)
         return btn
     }()
     
@@ -108,9 +109,14 @@ class OnboardingLastViewController: UIViewController {
 
 extension OnboardingLastViewController {
     private func bind() {
-        textField.rx.text
-            .orEmpty
+        
+        
+        //별명 텍스트필드
+        let textFieldOb = textField.rx.text.orEmpty.asObservable()
+        
+        textFieldOb
             .map{$0.count > 1}
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] value in
                 if value {
                     UIView.transition(with: self!.habitLabel, duration: 0.4,
@@ -130,9 +136,12 @@ extension OnboardingLastViewController {
                 
             })
             .disposed(by: disposeBag)
-        habitField.rx.text
-            .orEmpty
+        
+        //습관텍스트필드
+        let habitFieldOb = habitField.rx.text.orEmpty.asObservable()
+        habitFieldOb
             .map{ $0.count > 0}
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] value in
                 self?.textField.isEnabled = !value
                 UIView.transition(with: self!.dayLabel, duration: 0.4,
@@ -142,9 +151,10 @@ extension OnboardingLastViewController {
                 })
             })
             .disposed(by: disposeBag)
-        habitField.rx.text
-            .orEmpty
+        
+        habitFieldOb
             .map{ $0.count > 1}
+            .observe(on: MainScheduler.instance)
             .subscribe(onNext: { [weak self] value in
                 UIView.transition(with: self!.dayLabel, duration: 0.4,
                                   options: .transitionCrossDissolve,
@@ -155,20 +165,46 @@ extension OnboardingLastViewController {
                 })
             })
             .disposed(by: disposeBag)
+        
+        let textFieldVaild = textFieldOb.map { $0.count > 1 }
+        let habitVaild = habitFieldOb.map { $0.count > 1 }
+        
+        //시작하기 버튼
+        let startBtnOb = startBtn.rx.tap.asObservable()
+        
+        startBtnOb
+            .subscribe(onNext: { [weak self] _ in
+                print(self?.selectedDay ?? 0)
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        
         hundredBtn.rx.tap
-            .subscribe(onNext: { [weak self] s in
-                print(s)
+            .subscribe(onNext: { [weak self] _ in
                 self?.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
+                
             })
             .disposed(by: disposeBag)
         thirtyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.divideButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
+                
             })
             .disposed(by: disposeBag)
         fiftyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 self?.divideButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
+                
+            })
+            .disposed(by: disposeBag)
+        
+        
+        
+        Observable.combineLatest(textFieldVaild, habitVaild, resultSelector: { $0 && $1 })
+            .subscribe(onNext: { [weak self] value in
+                self?.startBtn.isEnabled = value
             })
             .disposed(by: disposeBag)
     }
@@ -181,6 +217,7 @@ extension OnboardingLastViewController {
         self.habitField.isHidden = true
         self.dayLabel.isHidden = true
         self.horizontalStackView.isHidden = true
+        self.startBtn.isEnabled = false
     }
     
     private func setLayout() {
