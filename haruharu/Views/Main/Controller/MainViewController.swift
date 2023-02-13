@@ -31,7 +31,7 @@ class MainViewController: UIViewController {
     }
     
     private func setAttribute() {
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .secondarySystemBackground
         
     }
     

@@ -13,8 +13,11 @@
 		581BD9D12991134800080469 /* NanumGothicExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9CE2991134800080469 /* NanumGothicExtraBold.ttf */; };
 		581BD9D22991134800080469 /* NanumGothic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9CF2991134800080469 /* NanumGothic.ttf */; };
 		581BD9D32991134800080469 /* NanumGothicBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 581BD9D02991134800080469 /* NanumGothicBold.ttf */; };
+		5837C5492999F75500F95F4B /* OnboardingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5837C5482999F75500F95F4B /* OnboardingViewModel.swift */; };
+		5837C54D299A20DE00F95F4B /* Habit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5837C54C299A20DE00F95F4B /* Habit.swift */; };
 		585462802992047E00655F12 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 5854627F2992047E00655F12 /* Lottie */; };
 		585462832992065100655F12 /* challenge.json in Resources */ = {isa = PBXBuildFile; fileRef = 585462822992065100655F12 /* challenge.json */; };
+		586AEEAB2996414E006C0ED2 /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 586AEEAA2996414E006C0ED2 /* DatabaseManager.swift */; };
 		58757796299396FF0080D4B1 /* DaysButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58757795299396FF0080D4B1 /* DaysButton.swift */; };
 		588F8A56298A3FA000DDB306 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588F8A55298A3FA000DDB306 /* AppDelegate.swift */; };
 		588F8A58298A3FA000DDB306 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 588F8A57298A3FA000DDB306 /* SceneDelegate.swift */; };
@@ -39,7 +42,10 @@
 		581BD9CE2991134800080469 /* NanumGothicExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothicExtraBold.ttf; sourceTree = "<group>"; };
 		581BD9CF2991134800080469 /* NanumGothic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothic.ttf; sourceTree = "<group>"; };
 		581BD9D02991134800080469 /* NanumGothicBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = NanumGothicBold.ttf; sourceTree = "<group>"; };
+		5837C5482999F75500F95F4B /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
+		5837C54C299A20DE00F95F4B /* Habit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habit.swift; sourceTree = "<group>"; };
 		585462822992065100655F12 /* challenge.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = challenge.json; sourceTree = "<group>"; };
+		586AEEAA2996414E006C0ED2 /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		58757795299396FF0080D4B1 /* DaysButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DaysButton.swift; sourceTree = "<group>"; };
 		588F8A52298A3FA000DDB306 /* haruharu.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = haruharu.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		588F8A55298A3FA000DDB306 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +80,7 @@
 		581BD9C629910B1D00080469 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				5837C54E299A553100F95F4B /* Main */,
 				58757793299396D80080D4B1 /* Common */,
 				581BD9C729910B2400080469 /* Onboarding */,
 			);
@@ -83,8 +90,8 @@
 		581BD9C729910B2400080469 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
-				581BD9C42990DD2100080469 /* OnboardingViewController.swift */,
-				58D392E12992168C002FA01A /* OnboardingLastViewController.swift */,
+				5837C5472999F74000F95F4B /* Controller */,
+				5837C5462999F73800F95F4B /* ViewModel */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -110,12 +117,77 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		5837C5462999F73800F95F4B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				5837C5482999F75500F95F4B /* OnboardingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		5837C5472999F74000F95F4B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				581BD9C42990DD2100080469 /* OnboardingViewController.swift */,
+				58D392E12992168C002FA01A /* OnboardingLastViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5837C54A299A20B700F95F4B /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5837C54B299A20D300F95F4B /* Model */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		5837C54B299A20D300F95F4B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				5837C54C299A20DE00F95F4B /* Habit.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		5837C54E299A553100F95F4B /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				5837C550299A553F00F95F4B /* ViewModel */,
+				5837C54F299A553900F95F4B /* Controller */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		5837C54F299A553900F95F4B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				588F8A69298A643300DDB306 /* MainViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		5837C550299A553F00F95F4B /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
 		585462812992061500655F12 /* Lotties */ = {
 			isa = PBXGroup;
 			children = (
 				585462822992065100655F12 /* challenge.json */,
 			);
 			path = Lotties;
+			sourceTree = "<group>";
+		};
+		586AEEA929964140006C0ED2 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				586AEEAA2996414E006C0ED2 /* DatabaseManager.swift */,
+			);
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		58757793299396D80080D4B1 /* Common */ = {
@@ -153,13 +225,14 @@
 		588F8A54298A3FA000DDB306 /* haruharu */ = {
 			isa = PBXGroup;
 			children = (
+				586AEEA929964140006C0ED2 /* Managers */,
 				585462812992061500655F12 /* Lotties */,
 				581BD9CD2991124700080469 /* Fonts */,
 				581BD9C829910D4200080469 /* Extension */,
+				5837C54A299A20B700F95F4B /* Data */,
 				581BD9C629910B1D00080469 /* Views */,
 				588F8A55298A3FA000DDB306 /* AppDelegate.swift */,
 				588F8A57298A3FA000DDB306 /* SceneDelegate.swift */,
-				588F8A69298A643300DDB306 /* MainViewController.swift */,
 				588F8A5E298A3FA100DDB306 /* Assets.xcassets */,
 				588F8A60298A3FA100DDB306 /* LaunchScreen.storyboard */,
 				588F8A63298A3FA100DDB306 /* Info.plist */,
@@ -257,11 +330,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				588F8A56298A3FA000DDB306 /* AppDelegate.swift in Sources */,
+				586AEEAB2996414E006C0ED2 /* DatabaseManager.swift in Sources */,
 				588F8A58298A3FA000DDB306 /* SceneDelegate.swift in Sources */,
 				588F8A6A298A643300DDB306 /* MainViewController.swift in Sources */,
 				58D392E429922F05002FA01A /* UITextField+Ext.swift in Sources */,
+				5837C54D299A20DE00F95F4B /* Habit.swift in Sources */,
 				581BD9C52990DD2100080469 /* OnboardingViewController.swift in Sources */,
 				581BD9CA29910D6800080469 /* Color+Ext.swift in Sources */,
+				5837C5492999F75500F95F4B /* OnboardingViewModel.swift in Sources */,
 				581BD9CC29910E3800080469 /* UIButton+Ext.swift in Sources */,
 				58D392E22992168C002FA01A /* OnboardingLastViewController.swift in Sources */,
 				58757796299396FF0080D4B1 /* DaysButton.swift in Sources */,

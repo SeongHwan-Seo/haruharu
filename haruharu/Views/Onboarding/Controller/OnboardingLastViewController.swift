@@ -15,7 +15,6 @@ import RxCocoa
 class OnboardingLastViewController: UIViewController {
     let disposeBag = DisposeBag()
     let viewModel = OnboardingViewModel()
-    var selectedDay = 0
     
     lazy var nickNameLabel: UILabel = {
         let label = UILabel()
@@ -168,7 +167,6 @@ extension OnboardingLastViewController {
                 guard let self = self else { return }
                 self.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
                 self.viewModel.selectedDay.onNext(100)
-                //self?.selectedDay = 100
             })
             .disposed(by: disposeBag)
         thirtyBtn.rx.tap
@@ -176,7 +174,6 @@ extension OnboardingLastViewController {
                 guard let self = self else { return }
                 self.divideButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
                 self.viewModel.selectedDay.onNext(30)
-                //self?.selectedDay = 30
             })
             .disposed(by: disposeBag)
         fiftyBtn.rx.tap
@@ -184,7 +181,28 @@ extension OnboardingLastViewController {
                 guard let self = self else { return }
                 self.divideButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
                 self.viewModel.selectedDay.onNext(50)
-                //self?.selectedDay = 50
+            })
+            .disposed(by: disposeBag)
+        
+        startBtn.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                // Realm 파일 위치
+               
+                do {
+                    try self.viewModel.createHaibit(habitName: self.viewModel.habitText.value(), goalDay: self.viewModel.selectedDay.value())
+                    try self.viewModel.setNickname(self.viewModel.nicknameText.value())
+                    self.viewModel.setIsFirst()
+                    
+                    
+                    let vc = MainViewController()
+                    vc.modalPresentationStyle = .fullScreen //or .overFullScreen for transparency
+                    vc.modalTransitionStyle = .flipHorizontal
+                    self.present(vc, animated: true, completion: nil)
+                } catch {
+                    
+                }
+                
             })
             .disposed(by: disposeBag)
 

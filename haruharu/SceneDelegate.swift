@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if isFirst {
             let mainViewController = MainViewController()
-            window?.rootViewController = mainViewController
+            let navigationController = UINavigationController(rootViewController: mainViewController)
+            window?.rootViewController = navigationController
         } else {
             let onboardingViewController = OnboardingViewController()
             let navigationController = UINavigationController(rootViewController: onboardingViewController)
