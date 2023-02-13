@@ -14,6 +14,7 @@ import RxCocoa
 
 class OnboardingLastViewController: UIViewController {
     let disposeBag = DisposeBag()
+    let viewModel = OnboardingViewModel()
     var selectedDay = 0
     
     lazy var nickNameLabel: UILabel = {
@@ -110,101 +111,87 @@ class OnboardingLastViewController: UIViewController {
 extension OnboardingLastViewController {
     private func bind() {
         
+        textField.rx.text.orEmpty
+            .bind(to: viewModel.nicknameText)
+            .disposed(by: disposeBag)
         
-        //별명 텍스트필드
-        let textFieldOb = textField.rx.text.orEmpty.asObservable()
+        habitField.rx.text.orEmpty
+            .bind(to: viewModel.habitText)
+            .disposed(by: disposeBag)
         
-        textFieldOb
-            .map{$0.count > 1}
-            .observe(on: MainScheduler.instance)
+        viewModel.isNicknameVaild
             .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
                 if value {
-                    UIView.transition(with: self!.habitLabel, duration: 0.4,
+                    UIView.transition(with: self.habitLabel, duration: 0.4,
                                       options: .transitionCrossDissolve,
                                       animations: {
-                        self?.habitLabel.isHidden = false
+                        self.habitLabel.isHidden = !value
                     })
-                    UIView.transition(with: self!.habitField, duration: 0.4,
+                    UIView.transition(with: self.habitField, duration: 0.4,
                                       options: .transitionCrossDissolve,
                                       animations: {
-                        self?.habitField.isHidden = false
+                        self.habitField.isHidden = !value
                     })
                 } else {
-                    self?.habitField.isHidden = true
-                    self?.habitLabel.isHidden = true
+                    self.habitLabel.isHidden = !value
+                    self.habitField.isHidden = !value
                 }
-                
             })
             .disposed(by: disposeBag)
         
-        //습관텍스트필드
-        let habitFieldOb = habitField.rx.text.orEmpty.asObservable()
-        habitFieldOb
-            .map{ $0.count > 0}
-            .observe(on: MainScheduler.instance)
+        viewModel.isHabitVaild
             .subscribe(onNext: { [weak self] value in
-                self?.textField.isEnabled = !value
-                UIView.transition(with: self!.dayLabel, duration: 0.4,
-                                  options: .transitionCrossDissolve,
-                                  animations: {
-                    self?.dayLabel.isHidden = !value
-                })
+                guard let self = self else { return }
+                if value {
+                    UIView.transition(with: self.dayLabel, duration: 0.4,
+                                      options: .transitionCrossDissolve,
+                                      animations: {
+                        self.dayLabel.isHidden = !value
+                    })
+                    UIView.transition(with: self.horizontalStackView, duration: 0.4,
+                                      options: .transitionCrossDissolve,
+                                      animations: {
+                        self.horizontalStackView.isHidden = !value
+                    })
+                    self.textField.isEnabled = !value
+                } else {
+                    self.dayLabel.isHidden = !value
+                    self.horizontalStackView.isHidden = !value
+                    self.textField.isEnabled = !value
+                }
             })
             .disposed(by: disposeBag)
-        
-        habitFieldOb
-            .map{ $0.count > 1}
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] value in
-                UIView.transition(with: self!.dayLabel, duration: 0.4,
-                                  options: .transitionCrossDissolve,
-                                  animations: {
-                    self?.dayLabel.isHidden = !value
-                    self?.horizontalStackView.isHidden = !value
-                    
-                })
-            })
-            .disposed(by: disposeBag)
-        
-        let textFieldVaild = textFieldOb.map { $0.count > 1 }
-        let habitVaild = habitFieldOb.map { $0.count > 1 }
-        
-        //시작하기 버튼
-        let startBtnOb = startBtn.rx.tap.asObservable()
-        
-        startBtnOb
-            .subscribe(onNext: { [weak self] _ in
-                print(self?.selectedDay ?? 0)
-            })
-            .disposed(by: disposeBag)
-        
-        
-        
-        
+
         hundredBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
-                
+                guard let self = self else { return }
+                self.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
+                self.viewModel.selectedDay.onNext(100)
+                //self?.selectedDay = 100
             })
             .disposed(by: disposeBag)
         thirtyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.divideButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
-                
+                guard let self = self else { return }
+                self.divideButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
+                self.viewModel.selectedDay.onNext(30)
+                //self?.selectedDay = 30
             })
             .disposed(by: disposeBag)
         fiftyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
-                self?.divideButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
-                
+                guard let self = self else { return }
+                self.divideButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
+                self.viewModel.selectedDay.onNext(50)
+                //self?.selectedDay = 50
             })
             .disposed(by: disposeBag)
-        
-        
-        
-        Observable.combineLatest(textFieldVaild, habitVaild, resultSelector: { $0 && $1 })
+
+        Observable.combineLatest(viewModel.isSelectedDay, viewModel.isNicknameVaild, viewModel.isHabitVaild, resultSelector: { $0 && $1 && $2})
             .subscribe(onNext: { [weak self] value in
-                self?.startBtn.isEnabled = value
+                guard let self = self else { return }
+                self.startBtn.isEnabled = value
             })
             .disposed(by: disposeBag)
     }
@@ -213,11 +200,6 @@ extension OnboardingLastViewController {
         self.view.backgroundColor = .bgColor
         navigationController?.navigationItem.backBarButtonItem?.title = ""
         
-        self.habitLabel.isHidden = true
-        self.habitField.isHidden = true
-        self.dayLabel.isHidden = true
-        self.horizontalStackView.isHidden = true
-        self.startBtn.isEnabled = false
     }
     
     private func setLayout() {
