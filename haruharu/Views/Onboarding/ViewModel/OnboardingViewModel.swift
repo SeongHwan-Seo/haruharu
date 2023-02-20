@@ -7,6 +7,7 @@
 
 import Foundation
 import RxSwift
+import RealmSwift
 
 class OnboardingViewModel {
     //Input
@@ -41,8 +42,11 @@ class OnboardingViewModel {
         
         let db = DatabaseManager.shared
         
-        db.createHabit(habitName, goalDay)
+        guard let createdDate = Date().toString() else { return }
+        let habitDeatil = List<HabitDetail>()
+        db.createHabit(habitName, goalDay, createdDate, habitDeatil)
     }
+    
     
     
     /// 유저디폴트 닉네임 저장

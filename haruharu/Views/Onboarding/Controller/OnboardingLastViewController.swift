@@ -196,9 +196,10 @@ extension OnboardingLastViewController {
                     
                     
                     let vc = MainViewController()
-                    vc.modalPresentationStyle = .fullScreen //or .overFullScreen for transparency
-                    vc.modalTransitionStyle = .flipHorizontal
-                    self.present(vc, animated: true, completion: nil)
+                    let navigationViewController = NavigationController(rootViewController: vc)
+                    navigationViewController.modalPresentationStyle = .fullScreen //or .overFullScreen for transparency
+                    navigationViewController.modalTransitionStyle = .flipHorizontal
+                    self.present(navigationViewController, animated: true, completion: nil)
                 } catch {
                     
                 }
@@ -226,18 +227,15 @@ extension OnboardingLastViewController {
         }
         
         thirtyBtn.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.width.equalTo(UIScreen.main.bounds.width - 40)
+            $0.height.equalTo(55)
         }
         
         fiftyBtn.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.width.equalTo(UIScreen.main.bounds.width - 40)
+            $0.height.equalTo(55)
         }
         
         hundredBtn.snp.makeConstraints {
-            $0.height.equalTo(48)
-            $0.width.equalTo(UIScreen.main.bounds.width - 40)
+            $0.height.equalTo(55)
         }
         
         horizontalStackView.snp.makeConstraints{

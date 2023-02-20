@@ -92,9 +92,8 @@ extension OnboardingViewController {
         
         animationView.snp.makeConstraints{
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(mainLabel.snp.top).offset(15)
-            $0.leading.trailing.equalToSuperview().inset(12)
-            $0.width.equalTo(200)
+            $0.bottom.equalTo(mainLabel.snp.top).offset(-15)
+            $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(300)
         }
         
