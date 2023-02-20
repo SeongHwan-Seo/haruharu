@@ -96,16 +96,17 @@ class HabitListViewCell: UITableViewCell {
         
         circleChart = KDCircularProgress(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         circleChart.startAngle = -90
-        circleChart.progressThickness = 0.2
+        circleChart.progressThickness = 0.4
         circleChart.trackThickness = 0.6
         circleChart.clockwise = true
         circleChart.gradientRotateSpeed = 2
-        circleChart.roundedCorners = false
+        circleChart.roundedCorners = true
         circleChart.glowMode = .forward
-        circleChart.glowAmount = 0.9
+        circleChart.glowAmount = 0.3
         circleChart.trackColor = .bgColor!
-        circleChart.set(colors: UIColor.cyan ,UIColor.white, UIColor.magenta, UIColor.white, UIColor.orange)
+        circleChart.set(colors: .btnBgColor!)
         circleChart.center = CGPoint(x: uiView.frame.origin.x + 40, y: uiView.frame.origin.y + 60)
+        
         
     }
     
@@ -135,7 +136,7 @@ class HabitListViewCell: UITableViewCell {
         }
         
         verticalStackView.snp.makeConstraints {
-            $0.top.bottom.equalTo(uiView).offset(40)
+            $0.top.equalTo(uiView).offset(40)
             $0.bottom.equalTo(uiView).offset(-40)
             $0.leading.equalTo(circleChart.snp.trailing).offset(12)
         }

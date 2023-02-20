@@ -6,3 +6,20 @@
 //
 
 import Foundation
+import RxSwift
+import RxRelay
+
+class MainViewModel {
+    let db = DatabaseManager.shared
+    
+    let habits = BehaviorSubject<[Habit]>(value:[])
+    
+    init() {
+        print("MainViewModel init -")
+        fetchHabits()
+    }
+    func fetchHabits() {
+        habits.onNext(db.fetchHabits())
+    }
+    
+}
