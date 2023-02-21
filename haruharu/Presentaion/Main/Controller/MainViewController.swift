@@ -12,6 +12,7 @@ import RxSwift
 import RxCocoa
 
 
+
 class MainViewController: UIViewController, UITableViewDelegate {
     
     let disposeBag = DisposeBag()
@@ -46,13 +47,6 @@ class MainViewController: UIViewController, UITableViewDelegate {
     
     private func bind() {
         
-        
-//        rightButton.rx.tap
-//            .subscribe(onNext: { _ in
-//                let angleValue: Double = 360 * Double((item.startDays.count / 10))
-//            })
-//            .disposed(by: disposeBag)
-        
         viewModel.habits.bind(to: mainView.habitListView.tableView.rx.items(cellIdentifier: "HabitListViewCell", cellType: HabitListViewCell.self)) { (row, item, cell) in
             cell.titleLabel.text = item.habitName
             
@@ -65,15 +59,18 @@ class MainViewController: UIViewController, UITableViewDelegate {
             
             let angleValue: Double = 360 * (Double(item.startDays.count) / Double(item.goalDay))
             
-            print(angleValue)
             cell.countLabel.text = "\(item.startDays.count)"
             cell.circleChart.animate(toAngle: angleValue, duration: 0.8, completion: nil)
-            
-            
             
             cell.selectionStyle = .none
         }.disposed(by: disposeBag)
         
+        Observable.zip(mainView.habitListView.tableView.rx.modelSelected(Habit.self), mainView.habitListView.tableView.rx.itemSelected)
+            .bind { (item, indexPath) in
+                print(item)
+                print(indexPath)
+            }
+            .disposed(by: disposeBag)
     }
     
     private func setAttribute() {

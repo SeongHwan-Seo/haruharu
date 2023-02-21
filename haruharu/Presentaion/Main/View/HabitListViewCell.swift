@@ -96,7 +96,7 @@ class HabitListViewCell: UITableViewCell {
         
         circleChart = KDCircularProgress(frame: CGRect(x: 0, y: 0, width: 60, height: 60))
         circleChart.startAngle = -90
-        circleChart.progressThickness = 0.4
+        circleChart.progressThickness = 0.5
         circleChart.trackThickness = 0.6
         circleChart.clockwise = true
         circleChart.gradientRotateSpeed = 2
