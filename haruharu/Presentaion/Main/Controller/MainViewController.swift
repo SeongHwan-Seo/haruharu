@@ -31,7 +31,6 @@ class MainViewController: UIViewController, UITableViewDelegate {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         bind()
-        setAttribute()
         setLayout()
         
     }
@@ -43,10 +42,8 @@ class MainViewController: UIViewController, UITableViewDelegate {
         self.view = mainView
     }
     
-    
-    
     private func bind() {
-        
+     
         viewModel.habits.bind(to: mainView.habitListView.tableView.rx.items(cellIdentifier: "HabitListViewCell", cellType: HabitListViewCell.self)) { (row, item, cell) in
             cell.titleLabel.text = item.habitName
             
@@ -71,12 +68,16 @@ class MainViewController: UIViewController, UITableViewDelegate {
                 print(indexPath)
             }
             .disposed(by: disposeBag)
+        
+        mainView.plusBtn.rx.tap
+            .subscribe(onNext: { [weak self] in
+                let addViewController = AddViewController()
+                self?.navigationController?.pushViewController(addViewController, animated: true)
+            })
+            .disposed(by: disposeBag)
+        
     }
     
-    private func setAttribute() {
-        
-        
-    }
     
     private func setLayout() {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightButton)

@@ -56,7 +56,7 @@ class AddView: UIView {
     lazy var addBtn: UIButton = {
         let btn = UIButton()
         
-        btn.setTitle("시작하기", for: .normal)
+        btn.setTitle("추가하기", for: .normal)
         btn.titleLabel?.font = UIFont(name: "NanumGothicBold", size: 14)
         btn.setTitleColor(.white, for: .normal)
         btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .normal)
