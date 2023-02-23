@@ -12,6 +12,8 @@ class DetailView: UIView {
     
     lazy var detailHeaderView = DetailHeaderView()
     
+    lazy var detailMainView = DetailMainView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAttribute()
@@ -27,13 +29,20 @@ class DetailView: UIView {
     }
     
     private func setLayout() {
-        [detailHeaderView].forEach {
+        [detailHeaderView, detailMainView].forEach {
             addSubview($0)
         }
         
         detailHeaderView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).offset(20)
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(20)
+        }
+        
+        detailMainView.snp.makeConstraints {
+            $0.top.equalTo(detailHeaderView.snp.bottom).offset(15)
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.height.equalTo(300)
         }
         
     }

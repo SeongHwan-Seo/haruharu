@@ -10,8 +10,8 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class DetailViewController: UIViewController {
-    
+class DetailViewController: UIViewController, UIScrollViewDelegate {
+    let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let disposeBag = DisposeBag()
     
     lazy var deleteBtn: UIButton = {
@@ -36,6 +36,7 @@ class DetailViewController: UIViewController {
         setLayout()
         setAttribute()
         bind()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -47,11 +48,28 @@ class DetailViewController: UIViewController {
     }
     
     private func bind() {
+        guard let habit = habit else { return }
+        
+        detailView.detailMainView.collectionView.rx.setDelegate(self)
+            .disposed(by: disposeBag)
+        
         detailView.detailHeaderView.chkBtn.rx.tap
             .subscribe(onNext: {
                 print("dd")
             })
             .disposed(by: disposeBag)
+        
+        Observable.from([1...habit.goalDay])
+            .bind(to: detailView.detailMainView.collectionView.rx.items(cellIdentifier: DetailMainViewCell.identifier, cellType: DetailMainViewCell.self)) { (row, item, cell) in
+                if habit.startDays.count >= item {
+                    cell.backgroundColor = .collectionChkBgColor
+                    //cell.label.text = "\(item)"
+                } else {
+                    cell.backgroundColor = .collectionBgColor
+                }
+            }
+            .disposed(by: disposeBag)
+        
         
     }
     
@@ -73,4 +91,21 @@ class DetailViewController: UIViewController {
         
     }
     
+}
+
+
+extension DetailViewController: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            let width = collectionView.frame.width
+            let height = collectionView.frame.height
+            let itemsPerRow: CGFloat = 6
+            let widthPadding = sectionInsets.left * (itemsPerRow + 1)
+            let itemsPerColumn: CGFloat = 5
+            let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
+            let cellWidth = (width - widthPadding) / itemsPerRow
+            let cellHeight = (height - heightPadding) / itemsPerColumn
+
+            return CGSize(width: cellWidth, height: cellHeight)
+
+        }
 }
