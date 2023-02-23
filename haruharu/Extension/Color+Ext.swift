@@ -13,4 +13,7 @@ extension UIColor {
     static let fgTintColor = UIColor(named: "FgTintColor")
     static let textFieldBgColor = UIColor(named: "TextFieldBgColor")
     static let bgColor = UIColor(named: "BgColor")
+    static let collectionBgColor = UIColor(named: "CollectionBgColor")
+    static let collectionChkBgColor = UIColor(named: "CollectionChkBgColor")
+    static let cardViewBgColor = UIColor(named: "CardViewBgColor")
 }
