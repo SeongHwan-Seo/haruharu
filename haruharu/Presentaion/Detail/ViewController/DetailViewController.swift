@@ -14,6 +14,8 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let disposeBag = DisposeBag()
     
+    let viewModel = DetailViewModel()
+    
     lazy var deleteBtn: UIButton = {
         let btn = UIButton(type: .system)
         
@@ -49,6 +51,21 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     
     private func bind() {
         guard let habit = habit else { return }
+        
+        deleteBtn.rx.tap
+            .subscribe(onNext: { [weak self] in
+                guard let self = self else { return }
+                let popupViewController = PopupViewController()
+                popupViewController.modalPresentationStyle = .overFullScreen
+                
+                popupViewController.confirmBtnCompletionClosure = {
+                    self.viewModel.deleteHabit(id: habit._id)
+                    self.navigationController?.popViewController(animated: true)
+                }
+                
+                self.present(popupViewController, animated: false)
+            })
+            .disposed(by: disposeBag)
         
         detailView.detailMainView.collectionView.rx.setDelegate(self)
             .disposed(by: disposeBag)

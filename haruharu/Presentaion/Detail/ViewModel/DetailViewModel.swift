@@ -6,7 +6,12 @@
 //
 
 import Foundation
+import RealmSwift
 
 class DetailViewModel {
+    let db = DatabaseManager.shared
     
+    func deleteHabit(id: ObjectId) {
+        db.deleteHabit(id: id)
+    }
 }

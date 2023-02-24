@@ -39,7 +39,7 @@ class DetailView: UIView {
         }
         
         detailMainView.snp.makeConstraints {
-            $0.top.equalTo(detailHeaderView.snp.bottom).offset(15)
+            $0.top.equalTo(detailHeaderView.snp.bottom).offset(10)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.height.equalTo(300)
