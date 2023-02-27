@@ -35,16 +35,16 @@ class DetailMainView: UIView {
         super.layoutSubviews()
         
         self.collectionView.layer.cornerRadius = 15
-        self.collectionView.layer.shadowOpacity = 0.2
-        self.collectionView.layer.shadowColor = UIColor.gray.cgColor
-        self.collectionView.layer.shadowOffset = CGSize(width: 0, height: 0)
-        self.collectionView.layer.shadowRadius = 2
-        self.collectionView.layer.masksToBounds = true
+        self.layer.shadowOpacity = 0.2
+        self.layer.shadowColor = UIColor.gray.cgColor
+        self.layer.shadowOffset = CGSize(width: 0, height: 0)
+        self.layer.shadowRadius = 2
         self.collectionView.backgroundColor = .cardViewBgColor
+        self.collectionView.layer.masksToBounds = true
         self.collectionView.showsHorizontalScrollIndicator = false
     }
     
-    private func setAttributo() {
+    private func setAttribute() {
         
     }
     

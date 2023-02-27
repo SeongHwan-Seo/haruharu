@@ -14,6 +14,8 @@ class DetailView: UIView {
     
     lazy var detailMainView = DetailMainView()
     
+    //lazy var detailAlarmView = DetailAlarmView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAttribute()
@@ -37,6 +39,12 @@ class DetailView: UIView {
             $0.top.equalTo(safeAreaLayoutGuide).offset(20)
             $0.leading.trailing.equalToSuperview().inset(20)
         }
+        
+//        detailAlarmView.snp.makeConstraints {
+//            $0.top.equalTo(detailHeaderView.snp.bottom).offset(10)
+//            $0.leading.equalToSuperview().offset(20)
+//            $0.trailing.equalToSuperview().offset(-20)
+//        }
         
         detailMainView.snp.makeConstraints {
             $0.top.equalTo(detailHeaderView.snp.bottom).offset(10)

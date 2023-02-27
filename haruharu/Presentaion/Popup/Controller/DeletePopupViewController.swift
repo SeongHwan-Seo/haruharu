@@ -117,7 +117,7 @@ class PopupViewController: UIViewController {
         
         
         contentView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.leading.trailing.equalToSuperview().inset(40)
             $0.height.equalTo(250)
             $0.centerY.equalToSuperview()
         }

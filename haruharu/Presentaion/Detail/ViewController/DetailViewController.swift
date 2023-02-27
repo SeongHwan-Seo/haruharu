@@ -30,11 +30,13 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        print("DetailViewController init")
         
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       
         setLayout()
         setAttribute()
         bind()
@@ -52,10 +54,12 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     private func bind() {
         guard let habit = habit else { return }
         
+        viewModel.isComplete(habit: habit)
+        
         deleteBtn.rx.tap
             .subscribe(onNext: { [weak self] in
                 guard let self = self else { return }
-                let popupViewController = PopupViewController()
+                let popupViewController = DeletePopupViewController()
                 popupViewController.modalPresentationStyle = .overFullScreen
                 
                 popupViewController.confirmBtnCompletionClosure = {
@@ -71,21 +75,43 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
         
         detailView.detailHeaderView.chkBtn.rx.tap
-            .subscribe(onNext: {
-                print("dd")
+            .subscribe(onNext: { [weak self] in
+                self?.viewModel.addHabitDetail(id: habit._id)
+                
+                let popupViewController = ConfirmPopupViewController()
+                popupViewController.modalPresentationStyle = .overFullScreen
+                
+                popupViewController.completionClosure = {
+                    self?.navigationController?.popViewController(animated: true)
+                }
+                
+                self?.present(popupViewController, animated: false)
             })
             .disposed(by: disposeBag)
         
         Observable.from([1...habit.goalDay])
             .bind(to: detailView.detailMainView.collectionView.rx.items(cellIdentifier: DetailMainViewCell.identifier, cellType: DetailMainViewCell.self)) { (row, item, cell) in
                 if habit.startDays.count >= item {
-                    cell.backgroundColor = .collectionChkBgColor
-                    //cell.label.text = "\(item)"
+                    if habit.startDays.toArray()[row].startedDay == Date().toString() {
+                        cell.backgroundColor = .collectionChkBgColor
+                    } else {
+                        cell.backgroundColor = .collectionChkBgColor?.withAlphaComponent(0.7)
+                    }
+                    
+                    
                 } else {
                     cell.backgroundColor = .collectionBgColor
                 }
             }
             .disposed(by: disposeBag)
+
+        viewModel.isCompletedGoal
+            .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
+                self.detailView.detailHeaderView.chkBtn.isEnabled = !value
+            })
+            .disposed(by: disposeBag)
+       
         
         
     }
@@ -113,16 +139,16 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
 
 extension DetailViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            let width = collectionView.frame.width
-            let height = collectionView.frame.height
-            let itemsPerRow: CGFloat = 6
-            let widthPadding = sectionInsets.left * (itemsPerRow + 1)
-            let itemsPerColumn: CGFloat = 5
-            let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
-            let cellWidth = (width - widthPadding) / itemsPerRow
-            let cellHeight = (height - heightPadding) / itemsPerColumn
-
-            return CGSize(width: cellWidth, height: cellHeight)
-
-        }
+        let width = collectionView.frame.width
+        let height = collectionView.frame.height
+        let itemsPerRow: CGFloat = 6
+        let widthPadding = sectionInsets.left * (itemsPerRow + 1)
+        let itemsPerColumn: CGFloat = 5
+        let heightPadding = sectionInsets.top * (itemsPerColumn + 1)
+        let cellWidth = (width - widthPadding) / itemsPerRow
+        let cellHeight = (height - heightPadding) / itemsPerColumn
+        
+        return CGSize(width: cellWidth, height: cellHeight)
+        
+    }
 }
