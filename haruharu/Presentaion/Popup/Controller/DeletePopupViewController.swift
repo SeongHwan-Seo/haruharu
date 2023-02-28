@@ -11,7 +11,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class PopupViewController: UIViewController {
+class DeletePopupViewController: UIViewController {
     
     let disposeBag = DisposeBag()
     

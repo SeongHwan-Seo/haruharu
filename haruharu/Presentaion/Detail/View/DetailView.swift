@@ -40,11 +40,6 @@ class DetailView: UIView {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
-//        detailAlarmView.snp.makeConstraints {
-//            $0.top.equalTo(detailHeaderView.snp.bottom).offset(10)
-//            $0.leading.equalToSuperview().offset(20)
-//            $0.trailing.equalToSuperview().offset(-20)
-//        }
         
         detailMainView.snp.makeConstraints {
             $0.top.equalTo(detailHeaderView.snp.bottom).offset(10)

@@ -70,10 +70,10 @@ class DetailHeaderView: UIView {
     
     lazy var alarmVStackView: UIStackView = {
         let stackView = UIStackView()
-        stackView.spacing = 5
+        stackView.spacing = 13
         stackView.alignment = .leading
         stackView.axis = .vertical
-        stackView.distribution = .equalCentering
+        stackView.distribution = .fillEqually
         return stackView
     }()
     
@@ -103,8 +103,30 @@ class DetailHeaderView: UIView {
         return label
     }()
     
+    lazy var alarmChangeBtn: UIButton = {
+        let btn = UIButton(type: .system)
+        
+        btn.setTitle("시간변경", for: .normal)
+        btn.setTitleColor(.btnBgColor, for: .normal)
+        
+        btn.setTitleColor(.gray, for: .disabled)
+        
+        btn.titleLabel?.font = UIFont(name: "NanumGothicBold", size: 12)
+        return btn
+    }()
+    
+    lazy var alarmSwitchVStackView: UIStackView = {
+        let stackView = UIStackView()
+        //stackView.spacing = 5
+        stackView.alignment = .trailing
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
     lazy var alarmSwitch: UISwitch = {
         let alarmSwitch = UISwitch()
+        
         
         alarmSwitch.onTintColor = .btnBgColor
         return alarmSwitch
@@ -149,7 +171,11 @@ class DetailHeaderView: UIView {
             alarmVStackView.addArrangedSubview($0)
         }
         
-        [alarmVStackView, alarmSwitch].forEach {
+        [alarmSwitch, alarmChangeBtn].forEach {
+            alarmSwitchVStackView.addArrangedSubview($0)
+        }
+        
+        [alarmVStackView, alarmSwitchVStackView].forEach {
             alarmHStackView.addArrangedSubview($0)
         }
         

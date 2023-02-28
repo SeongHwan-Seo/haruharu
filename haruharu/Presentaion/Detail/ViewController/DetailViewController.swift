@@ -9,8 +9,11 @@ import Foundation
 import UIKit
 import RxSwift
 import RxCocoa
+import RealmSwift
+
 
 class DetailViewController: UIViewController, UIScrollViewDelegate {
+    let userNotificationCenter = UNUserNotificationCenter.current()
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let disposeBag = DisposeBag()
     
@@ -36,7 +39,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         setLayout()
         setAttribute()
         bind()
@@ -104,15 +107,95 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                 }
             }
             .disposed(by: disposeBag)
-
+        
         viewModel.isCompletedGoal
             .subscribe(onNext: { [weak self] value in
                 guard let self = self else { return }
                 self.detailView.detailHeaderView.chkBtn.isEnabled = !value
             })
             .disposed(by: disposeBag)
-       
         
+        detailView.detailHeaderView.alarmSwitch.rx.isOn
+            .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
+                let time = habit.alarmTime
+                if value {
+                    let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .sound)
+                    
+                    self.userNotificationCenter.requestAuthorization(options: authOptions) { success, error in
+                        
+                        if let error = error {
+                            print("Error: \(error.localizedDescription)")
+                        }
+                        DispatchQueue.main.async {
+                            if !success {
+                                // 어플 권한요청이 해제 되어 있을 경우 앱 설정창으로 이동
+                                self.detailView.detailHeaderView.alarmSwitch.setOn(false, animated: true)
+                                
+                                let permissionPopupVC = PermissionPopupViewController()
+                                permissionPopupVC.modalPresentationStyle = .overFullScreen
+                                permissionPopupVC.confirmBtnCompletionClosure = {
+                                    guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+                                    
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                                self.present(permissionPopupVC, animated: false)
+                                
+                                
+                            } else {
+                                self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = value
+                                
+                                
+                                var dateComponents = DateComponents()
+                                dateComponents.calendar = Calendar.current
+                                
+                                dateComponents.hour = Int(time.prefix(2))
+                                dateComponents.minute = Int(time.suffix(2))
+                                
+                                self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
+                                self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: time)
+                            }
+                        }
+                    }
+                } else {
+                    self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = value
+                    self.viewModel.deleteNotificationRequest(id: habit._id.stringValue)
+                    self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: false, alarmTime: time)
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        
+        detailView.detailHeaderView.alarmChangeBtn.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                
+                let timePickerPopupVC = TimePickerPopupViewController()
+                timePickerPopupVC.modalPresentationStyle = .overFullScreen
+                
+                timePickerPopupVC.confirmBtnCompletionClosure = {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "HHmm"
+                    dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+                    
+                    let time = dateFormatter.string(from: timePickerPopupVC.timePicker.date)
+                    
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "매일 \(time.prefix(2))시 \(time.suffix(2))분 하루 알림"
+                    
+                    var dateComponents = DateComponents()
+                    dateComponents.calendar = Calendar.current
+                    
+                    dateComponents.hour = Int(time.prefix(2))
+                    dateComponents.minute = Int(time.suffix(2))
+                    
+                    self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
+                    self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: time)
+                }
+                self.present(timePickerPopupVC, animated: false)
+            })
+            .disposed(by: disposeBag)
         
     }
     
@@ -126,6 +209,10 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         createdDate.insert(".", at: periodIndex2)
         createdDate.insert(".", at: periodIndex1)
         detailView.detailHeaderView.dateLabel.text = "\(createdDate) ~"
+        
+        
+        detailView.detailHeaderView.alarmSwitch.setOn(habit.isAlarm, animated: false)
+        detailView.detailHeaderView.alarmSubLabel.text = "매일 \(habit.alarmTime.prefix(2))시 \(habit.alarmTime.suffix(2))분 하루 알림"
         
     }
     
@@ -152,3 +239,4 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
         
     }
 }
+
