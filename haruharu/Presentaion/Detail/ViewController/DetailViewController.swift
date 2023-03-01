@@ -66,6 +66,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                 popupViewController.modalPresentationStyle = .overFullScreen
                 
                 popupViewController.confirmBtnCompletionClosure = {
+                    self.viewModel.deleteNotificationRequest(id: habit._id.stringValue)
                     self.viewModel.deleteHabit(id: habit._id)
                     self.navigationController?.popViewController(animated: true)
                 }
