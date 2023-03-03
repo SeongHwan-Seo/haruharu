@@ -51,8 +51,10 @@ class OnboardingViewModel {
     
     /// 유저디폴트 닉네임 저장
     /// - Parameter nickname: 닉네임
-    func setNickname(_ nickname: String) {
-        UserDefaults.standard.set(nickname, forKey: "nickname")
+    func createUser(_ nickname: String, createdDate: String) {
+        let db = DatabaseManager.shared
+        
+        db.createUser(nickname, createdDate)
     }
     
     func setIsFirst() {

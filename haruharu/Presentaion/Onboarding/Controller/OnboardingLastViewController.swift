@@ -44,7 +44,7 @@ class OnboardingLastViewController: UIViewController {
         btn.titleLabel?.font = UIFont(name: "NanumGothicBold", size: 14)
         btn.setTitleColor(.white, for: .normal)
         btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .normal)
-        //btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .disabled)
+        btn.setBackgroundColor(.btnBgColor?.withAlphaComponent(0.7),cornerRadius: 12, for: .disabled)
         return btn
     }()
     
@@ -191,7 +191,7 @@ extension OnboardingLastViewController {
                
                 do {
                     try self.viewModel.createHaibit(habitName: self.viewModel.habitText.value(), goalDay: self.viewModel.selectedDay.value())
-                    try self.viewModel.setNickname(self.viewModel.nicknameText.value())
+                    try self.viewModel.createUser(self.viewModel.nicknameText.value(), createdDate: Date().toString()!)
                     self.viewModel.setIsFirst()
                     
                     
