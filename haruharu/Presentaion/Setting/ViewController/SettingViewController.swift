@@ -15,6 +15,7 @@ import SnapKit
 class SettingViewController: UIViewController {
     
     let viewModel = SettingViewModel()
+    let disposeBag = DisposeBag()
     
     lazy var settingView = SettingView()
     
@@ -26,10 +27,28 @@ class SettingViewController: UIViewController {
         self.view = settingView
         
         setAttribute()
+        bind()
     }
     
     private func bind() {
+        print("SettingViewController - bind()")
         
+        
+        
+        viewModel.settingMenu.bind(to: settingView.settingMenuView.tableView.rx.items(cellIdentifier: SettingMenuViewCell.identifier, cellType: SettingMenuViewCell.self)) { (row, item, cell) in
+            cell.mainLabel.text = item.title
+            switch item {
+            case .rating:
+                cell.subLabel.text = ""
+            case .version:
+                cell.subLabel.text = "1.0.0"
+            case .privacy:
+                cell.subLabel.text = ""
+            }
+            
+            cell.selectionStyle = .none
+        }
+        .disposed(by: disposeBag)
     }
     
     private func setAttribute() {

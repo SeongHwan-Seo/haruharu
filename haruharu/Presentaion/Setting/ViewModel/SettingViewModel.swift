@@ -6,9 +6,12 @@
 //
 
 import Foundation
-
+import RxSwift
 
 class SettingViewModel {
+    
+    var settingMenu = BehaviorSubject<[SettingMenu]>(value: SettingMenu.allCases)
+    var test = BehaviorSubject<[String]>(value: ["1", "2", "3"])
     
     func getCountDate(createdDate: String) -> Int{
         let dateFormatter = DateFormatter()
@@ -21,3 +24,5 @@ class SettingViewModel {
         return Int(nowDate.timeIntervalSince(createdDate)) / (60 * 60) / 24 + 1
     }
 }
+
+

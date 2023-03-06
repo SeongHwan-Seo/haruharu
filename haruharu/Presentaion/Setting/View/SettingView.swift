@@ -13,6 +13,8 @@ class SettingView: UIView {
     
     lazy var settingHeaderView = SettingHeaderView()
     
+    lazy var settingMenuView = SettingMenuView()
+    
     lazy var logoView: UIImageView = {
        let imageView = UIImageView()
         
@@ -32,10 +34,11 @@ class SettingView: UIView {
     
     private func setAttribute() {
         self.backgroundColor = .bgColor
+        
     }
     
     private func setLayout() {
-        [settingHeaderView, logoView].forEach{
+        [settingHeaderView, settingMenuView, logoView].forEach{
             addSubview($0)
         }
         
@@ -45,11 +48,17 @@ class SettingView: UIView {
             $0.leading.trailing.equalToSuperview().inset(20)
         }
         
+        settingMenuView.snp.makeConstraints {
+            $0.top.equalTo(settingHeaderView.snp.bottom).offset(30)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalTo(logoView.snp.top).offset(-40)
+        }
+        
         logoView.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(safeAreaLayoutGuide).offset(-40)
-            $0.width.equalTo(90)
-            $0.height.equalTo(30)
+            $0.width.equalTo(80)
+            $0.height.equalTo(25)
         }
     }
 }
