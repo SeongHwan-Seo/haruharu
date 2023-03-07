@@ -8,6 +8,7 @@
 import Foundation
 import RxSwift
 import RealmSwift
+import RxCocoa
 
 class OnboardingViewModel {
     //Input
@@ -23,12 +24,12 @@ class OnboardingViewModel {
     
     init() {
         _ = nicknameText.distinctUntilChanged()
-            .map{ $0.count > 1 }
+            .map{ $0.count > 1 && $0.count < 9}
             .bind(to: isNicknameVaild)
             .disposed(by: disposeBag)
         
         _ = habitText.distinctUntilChanged()
-            .map{ $0.count > 1}
+            .map{ $0.count > 1 && $0.count < 9}
             .bind(to: isHabitVaild)
             .disposed(by: disposeBag)
         
@@ -36,6 +37,7 @@ class OnboardingViewModel {
             .map { $0 > 0}
             .bind(to: isSelectedDay)
             .disposed(by: disposeBag)
+        
     }
     
     func createHaibit(habitName: String, goalDay: Int) {
@@ -60,4 +62,6 @@ class OnboardingViewModel {
     func setIsFirst() {
         UserDefaults.standard.set(true, forKey: "isFirst")
     }
+    
+    
 }

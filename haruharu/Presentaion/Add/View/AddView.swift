@@ -25,7 +25,7 @@ class AddView: UIView {
         textField.layer.cornerRadius = 12
         textField.textColor = .fgTintColor
         textField.backgroundColor = .textFieldBgColor
-        textField.placeholder = "등록할 습관을 입력하세요."
+        textField.placeholder = "등록할 습관을 입력하세요.(최대 8자)"
         textField.font = UIFont(name: "NanumGothic", size: 14)
         textField.addLeftPadding()
         return textField
@@ -60,7 +60,7 @@ class AddView: UIView {
         btn.titleLabel?.font = UIFont(name: "NanumGothicBold", size: 14)
         btn.setTitleColor(.white, for: .normal)
         btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .normal)
-        //btn.setBackgroundColor(.btnBgColor,cornerRadius: 12, for: .disabled)
+        btn.setBackgroundColor(.btnBgColor?.withAlphaComponent(0.7),cornerRadius: 12, for: .disabled)
         return btn
     }()
     

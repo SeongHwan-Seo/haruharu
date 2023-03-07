@@ -26,11 +26,12 @@ class OnboardingLastViewController: UIViewController {
     
     lazy var textField: UITextField = {
         let textField = UITextField()
+        
         textField.returnKeyType = .done
         textField.layer.cornerRadius = 12
         textField.textColor = .fgTintColor
         textField.backgroundColor = .textFieldBgColor
-        textField.placeholder = "별명을 입력하세요."
+        textField.placeholder = "별명을 입력하세요.(최대 8자)"
         textField.font = UIFont(name: "NanumGothic", size: 14)
         textField.addLeftPadding()
         
@@ -62,7 +63,7 @@ class OnboardingLastViewController: UIViewController {
         textField.layer.cornerRadius = 12
         textField.textColor = .fgTintColor
         textField.backgroundColor = .textFieldBgColor
-        textField.placeholder = "등록할 습관을 입력하세요."
+        textField.placeholder = "등록할 습관을 입력하세요.(최대 8자)"
         textField.font = UIFont(name: "NanumGothic", size: 14)
         textField.addLeftPadding()
         return textField

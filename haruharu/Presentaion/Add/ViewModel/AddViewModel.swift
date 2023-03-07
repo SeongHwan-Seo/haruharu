@@ -24,7 +24,7 @@ class AddViewModel {
     init() {
         
         _ = habitText.distinctUntilChanged()
-            .map{ $0.count > 1}
+            .map{ $0.count > 1 && $0.count < 9}
             .bind(to: isHabitVaild)
             .disposed(by: disposeBag)
         
