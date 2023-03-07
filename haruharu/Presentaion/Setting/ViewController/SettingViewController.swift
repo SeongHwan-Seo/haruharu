@@ -31,24 +31,54 @@ class SettingViewController: UIViewController {
     }
     
     private func bind() {
-        print("SettingViewController - bind()")
-        
-        
-        
-        viewModel.settingMenu.bind(to: settingView.settingMenuView.tableView.rx.items(cellIdentifier: SettingMenuViewCell.identifier, cellType: SettingMenuViewCell.self)) { (row, item, cell) in
+        //setting menu bind in tableview
+        viewModel.settingMenu.bind(to: settingView.settingMenuView.tableView.rx.items(cellIdentifier: SettingMenuViewCell.identifier, cellType: SettingMenuViewCell.self)) { [weak self] (row, item, cell) in
+            guard let self = self else { return }
             cell.mainLabel.text = item.title
             switch item {
             case .rating:
                 cell.subLabel.text = ""
             case .version:
-                cell.subLabel.text = "1.0.0"
-            case .privacy:
+                cell.subLabel.text = "\(self.viewModel.getCurrentVersion())"
+            case .alarm:
                 cell.subLabel.text = ""
+//            case .privacy:
+//                cell.subLabel.text = ""
             }
             
             cell.selectionStyle = .none
         }
         .disposed(by: disposeBag)
+        
+        Observable.zip(settingView.settingMenuView.tableView.rx.modelSelected(SettingMenu.self), settingView.settingMenuView.tableView.rx.itemSelected)
+            .bind { [weak self] (item, indexPath) in
+                guard let self = self else { return }
+                switch item {
+                case .rating:
+                    self.viewModel.goToStore()
+                case .version:
+                    return
+                case .alarm:
+                    self.viewModel.goToAlarm()
+//                case .privacy:
+//                    return
+                }
+            }
+            .disposed(by: disposeBag)
+        
+        //수정버튼 클릭 이벤트
+        settingView.settingHeaderView.editBtn.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                guard let self = self else { return }
+                guard let user = self.user else { return }
+                let editViewController = EditViewController()
+                editViewController.user = user
+                editViewController.completionClosure = {
+                    self.settingView.settingHeaderView.nicknameLabel.text = editViewController.editView.nameField.text
+                }
+                self.navigationController?.pushViewController(editViewController, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setAttribute() {
