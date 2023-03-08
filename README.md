@@ -19,8 +19,12 @@
 - SnapKit
 
 # Goals
+- Users can add multiple habits.
+- Users can receive notifications by habit.
+- Users can complete the habit once a day.
 
 # ScreenShot
+![Group 4](https://user-images.githubusercontent.com/67613690/223621775-2e4e4f62-5061-4e2a-a179-f3c084ff3084.png)
 
 # Design
 #### AppIcon
