@@ -36,6 +36,7 @@
 > https://apps.apple.com/us/app/하루하루-습관-만들기/id6446077663
 
 # Version History
-#### v1.0 (2023. 03)
+#### v1.0.0 (2023. 03)
 > open
- 
+#### v1.0.1 (2023. 03. 10)
+> Fix: Alarm bug
