@@ -14,8 +14,6 @@ class DetailView: UIView {
     
     lazy var detailMainView = DetailMainView()
     
-    //lazy var detailAlarmView = DetailAlarmView()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setAttribute()

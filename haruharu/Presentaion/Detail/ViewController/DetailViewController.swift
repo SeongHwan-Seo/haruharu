@@ -120,6 +120,10 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .subscribe(onNext: { [weak self] value in
                 guard let self = self else { return }
                 let time = habit.alarmTime
+                print("Bind - ")
+                print("isAlarm : \(habit.isAlarm)")
+                print("habit : \(habit)")
+                print(value)
                 if value {
                     let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .sound)
                     
@@ -128,10 +132,13 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                         if let error = error {
                             print("Error: \(error.localizedDescription)")
                         }
-                        DispatchQueue.main.async {
+                        DispatchQueue.main.sync {
                             if !success {
                                 // 어플 권한요청이 해제 되어 있을 경우 앱 설정창으로 이동
                                 self.detailView.detailHeaderView.alarmSwitch.setOn(false, animated: true)
+                                self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = false
+                                self.viewModel.deleteNotificationRequest(id: habit._id.stringValue)
+                                self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: false, alarmTime: time)
                                 
                                 let permissionPopupVC = PermissionPopupViewController()
                                 permissionPopupVC.modalPresentationStyle = .overFullScreen
@@ -210,8 +217,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         createdDate.insert(".", at: periodIndex2)
         createdDate.insert(".", at: periodIndex1)
         detailView.detailHeaderView.dateLabel.text = "\(createdDate) ~"
-        
-        
+ 
         detailView.detailHeaderView.alarmSwitch.setOn(habit.isAlarm, animated: false)
         detailView.detailHeaderView.alarmSubLabel.text = "매일 \(habit.alarmTime.prefix(2))시 \(habit.alarmTime.suffix(2))분 하루 알림"
         
