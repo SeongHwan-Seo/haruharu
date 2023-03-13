@@ -15,7 +15,10 @@ class DetailHeaderView: UIView {
     lazy var habitLabel: UILabel = {
        let label = UILabel()
         
-        label.font = UIFont(name: "NanumGothicBold", size: 18)
+        label.font = UIFont(name: "NanumGothicBold", size: 16)
+        label.numberOfLines = 1
+        label.minimumScaleFactor = 0.7
+        label.adjustsFontSizeToFitWidth = true
         return label
     }()
     
@@ -51,7 +54,7 @@ class DetailHeaderView: UIView {
     
     lazy var hStackView : UIStackView = {
         let stackView = UIStackView()
-        stackView.spacing = 5
+        stackView.spacing = 20
         stackView.alignment = .center
         stackView.axis = .horizontal
         stackView.distribution = .equalCentering

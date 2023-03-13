@@ -95,15 +95,18 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         
         Observable.from([1...habit.goalDay])
             .bind(to: detailView.detailMainView.collectionView.rx.items(cellIdentifier: DetailMainViewCell.identifier, cellType: DetailMainViewCell.self)) { (row, item, cell) in
+                
                 if habit.startDays.count >= item {
+                    cell.countLabel.textColor = .white
+                    //cell.countLabel.tintColor = .white
                     if habit.startDays.toArray()[row].startedDay == Date().toString() {
                         cell.backgroundColor = .collectionChkBgColor
                     } else {
                         cell.backgroundColor = .collectionChkBgColor?.withAlphaComponent(0.7)
                     }
                     
-                    
                 } else {
+                    cell.countLabel.text = "\(item)"
                     cell.backgroundColor = .collectionBgColor
                 }
             }
@@ -120,10 +123,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .subscribe(onNext: { [weak self] value in
                 guard let self = self else { return }
                 let time = habit.alarmTime
-                print("Bind - ")
-                print("isAlarm : \(habit.isAlarm)")
-                print("habit : \(habit)")
-                print(value)
                 if value {
                     let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .sound)
                     
