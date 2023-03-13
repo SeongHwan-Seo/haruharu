@@ -29,7 +29,8 @@ class OnboardingViewModel {
             .disposed(by: disposeBag)
         
         _ = habitText.distinctUntilChanged()
-            .map{ $0.count > 1 && $0.count < 9}
+            .map{ $0.components(separatedBy: " ").joined()}
+            .map{ $0.count > 1 && $0.count < 16 }
             .bind(to: isHabitVaild)
             .disposed(by: disposeBag)
         

@@ -25,7 +25,7 @@ class AddView: UIView {
         textField.layer.cornerRadius = 12
         textField.textColor = .fgTintColor
         textField.backgroundColor = .textFieldBgColor
-        textField.placeholder = "등록할 습관을 입력하세요.(최대 8자)"
+        textField.placeholder = "등록할 습관을 입력하세요.(최대 15자)"
         textField.font = UIFont(name: "NanumGothic", size: 14)
         textField.addLeftPadding()
         return textField
