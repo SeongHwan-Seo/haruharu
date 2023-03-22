@@ -14,6 +14,7 @@ import RealmSwift
 
 class DetailViewController: UIViewController, UIScrollViewDelegate {
     let userNotificationCenter = UNUserNotificationCenter.current()
+    let haticManager = HapticManager.instance
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let disposeBag = DisposeBag()
     
@@ -55,7 +56,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func bind() {
-        guard let habit = habit else { return }
+        guard let habit = self.habit else { return }
         
         viewModel.isComplete(habit: habit)
         
@@ -79,9 +80,9 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .disposed(by: disposeBag)
         
         detailView.detailHeaderView.chkBtn.rx.tap
-            .subscribe(onNext: { [weak self] in
+            .subscribe(onNext: { [weak self] _ in
                 self?.viewModel.addHabitDetail(id: habit._id)
-                
+                self?.haticManager.notification(type: .success)
                 let popupViewController = ConfirmPopupViewController()
                 popupViewController.modalPresentationStyle = .overFullScreen
                 
@@ -97,8 +98,14 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .bind(to: detailView.detailMainView.collectionView.rx.items(cellIdentifier: DetailMainViewCell.identifier, cellType: DetailMainViewCell.self)) { (row, item, cell) in
                 
                 if habit.startDays.count >= item {
+                    let attributedString = NSMutableAttributedString(string: "")
+                    let imageAttachment = NSTextAttachment()
+                    imageAttachment.image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)
+                    imageAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
+                    
+                    attributedString.append(NSAttributedString(attachment: imageAttachment))
+                    cell.countLabel.attributedText = attributedString
                     cell.countLabel.textColor = .white
-                    //cell.countLabel.tintColor = .white
                     if habit.startDays.toArray()[row].startedDay == Date().toString() {
                         cell.backgroundColor = .collectionChkBgColor
                     } else {
@@ -108,6 +115,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                 } else {
                     cell.countLabel.text = "\(item)"
                     cell.backgroundColor = .collectionBgColor
+                    cell.countLabel.textColor = .textFieldBgColor
                 }
             }
             .disposed(by: disposeBag)

@@ -14,13 +14,7 @@ class DetailMainViewCell: UICollectionViewCell {
     
     lazy var countLabel: UILabel = {
         let label = UILabel()
-        let attributedString = NSMutableAttributedString(string: "")
-        let imageAttachment = NSTextAttachment()
-        imageAttachment.image = UIImage(named: "check")?.withRenderingMode(.alwaysTemplate)
-        imageAttachment.bounds = CGRect(x: 0, y: 0, width: 25, height: 25)
-        
-        attributedString.append(NSAttributedString(attachment: imageAttachment))
-        label.attributedText = attributedString
+       
         label.textAlignment = .center
         label.textColor = .textFieldBgColor
         label.font = UIFont(name: "NanumGothicExtraBold", size: 15)
