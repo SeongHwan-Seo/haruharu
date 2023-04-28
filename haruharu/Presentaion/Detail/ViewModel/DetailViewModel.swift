@@ -10,20 +10,24 @@ import RealmSwift
 import RxSwift
 import RxRealm
 import UserNotifications
+import RxRelay
 
 class DetailViewModel {
     let db = DatabaseManager.shared
     let disposeBag = DisposeBag()
     
     //output
-    let isCompletedGoal = BehaviorSubject(value: false)
+    let isCompletedGoal = BehaviorRelay(value: false)
     
     func deleteHabit(id: ObjectId) {
         db.deleteHabit(id: id)
     }
     
     func addHabitDetail(id: ObjectId) {
-        db.addHabitDetail(id: id)
+        // 하루체크가 목표일수 달성 시 알림 삭제
+        if db.addHabitDetail(id: id) {
+            deleteNotificationRequest(id: id.stringValue)
+        }
     }
     
     func updateHabitAlarm(id: ObjectId, isAlarm: Bool, alarmTime: String) {
@@ -35,12 +39,12 @@ class DetailViewModel {
             return habit.startDays.toArray().count == habit.goalDay ? true : false
         }
         
-        isCompletedGoal.onNext(isCompleted())
+        isCompletedGoal.accept(isCompleted())
         
         if isCompleted() {
-            isCompletedGoal.onNext(isCompleted())
+            isCompletedGoal.accept(isCompleted())
         } else {
-            isCompletedGoal.onNext(habit.startDays.toArray().map { $0.startedDay}.contains(Date().toString()))
+            isCompletedGoal.accept(habit.startDays.toArray().map { $0.startedDay}.contains(Date().toString()))
         }
     }
     

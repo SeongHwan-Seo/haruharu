@@ -120,17 +120,13 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             }
             .disposed(by: disposeBag)
         
-        viewModel.isCompletedGoal
-            .subscribe(onNext: { [weak self] value in
-                guard let self = self else { return }
-                self.detailView.detailHeaderView.chkBtn.isEnabled = !value
-            })
-            .disposed(by: disposeBag)
+        
         
         detailView.detailHeaderView.alarmSwitch.rx.isOn
             .subscribe(onNext: { [weak self] value in
                 guard let self = self else { return }
                 let time = habit.alarmTime
+                
                 if value {
                     let authOptions = UNAuthorizationOptions(arrayLiteral: .alert, .sound)
                     
@@ -160,17 +156,22 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                                 
                                 
                             } else {
-                                self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = value
-                                
-                                
-                                var dateComponents = DateComponents()
-                                dateComponents.calendar = Calendar.current
-                                
-                                dateComponents.hour = Int(time.prefix(2))
-                                dateComponents.minute = Int(time.suffix(2))
-                                
-                                self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
-                                self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: time)
+                                if self.viewModel.isCompletedGoal.value {
+                                    self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = !value
+                                } else {
+                                    self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = value
+                                    
+                                    
+                                    var dateComponents = DateComponents()
+                                    dateComponents.calendar = Calendar.current
+                                    
+                                    dateComponents.hour = Int(time.prefix(2))
+                                    dateComponents.minute = Int(time.suffix(2))
+                                    
+                                    
+                                    self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
+                                    self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: time)
+                                }
                             }
                         }
                     }
@@ -212,6 +213,15 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
+        
+        viewModel.isCompletedGoal
+            .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
+                self.detailView.detailHeaderView.chkBtn.isEnabled = !value
+                self.detailView.detailHeaderView.alarmSubLabel.text = "하루습관 목표 달성!"
+                self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = !value
+            })
+            .disposed(by: disposeBag)
     }
     
     private func setAttribute() {
