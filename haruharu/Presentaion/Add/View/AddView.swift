@@ -42,8 +42,7 @@ class AddView: UIView {
     lazy var thirtyBtn = DaysButton(daySelect: .thirtyDay)
     lazy var fiftyBtn = DaysButton(daySelect: .fiftyDay)
     lazy var hundredBtn = DaysButton(daySelect: .hundredDay)
-    
-    lazy var horizontalStackView: UIStackView = {
+    lazy var daysBtnStackView: UIStackView = {
         let view = UIStackView(arrangedSubviews: [thirtyBtn, fiftyBtn, hundredBtn])
         
         view.axis = .horizontal
@@ -52,6 +51,32 @@ class AddView: UIView {
         view.spacing = 10
         return view
     }()
+    
+    lazy var weekLabel: UILabel = {
+        let label = UILabel()
+        
+        label.text = "반복"
+        label.font = UIFont(name: "NanumGothicBold", size: 14)
+        return label
+    }()
+    
+    lazy var sundayBtn = WeekButton(weekSelect: .sunday)
+    lazy var mondayBtn = WeekButton(weekSelect: .monday)
+    lazy var tuesdayBtn = WeekButton(weekSelect: .tuesday)
+    lazy var wednesdayBtn = WeekButton(weekSelect: .wednesday)
+    lazy var thursdayBtn = WeekButton(weekSelect: .thursday)
+    lazy var fridayBtn = WeekButton(weekSelect: .friday)
+    lazy var saturdayBtn = WeekButton(weekSelect: .saturday)
+    lazy var weekBtnStackView: UIStackView = {
+        let view = UIStackView(arrangedSubviews: [sundayBtn, mondayBtn, tuesdayBtn, wednesdayBtn, thursdayBtn, fridayBtn, saturdayBtn])
+        
+        view.axis = .horizontal
+        view.distribution = .fillEqually
+        view.alignment = .center
+        view.spacing = 10
+        return view
+    }()
+    
     
     lazy var addBtn: UIButton = {
         let btn = UIButton()
@@ -80,20 +105,19 @@ class AddView: UIView {
     }
     
     private func setLayout() {
-        [habitLabel, habitField, dayLabel, horizontalStackView, addBtn].forEach {
+        [habitLabel, habitField, dayLabel, daysBtnStackView, weekLabel, weekBtnStackView, addBtn].forEach {
             addSubview($0)
         }
-        
-        thirtyBtn.snp.makeConstraints {
-            $0.height.equalTo(55)
+        [thirtyBtn, fiftyBtn, hundredBtn].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(55)
+            }
         }
         
-        fiftyBtn.snp.makeConstraints {
-            $0.height.equalTo(55)
-        }
-        
-        hundredBtn.snp.makeConstraints {
-            $0.height.equalTo(55)
+        [sundayBtn, mondayBtn, tuesdayBtn, wednesdayBtn, thursdayBtn, fridayBtn, saturdayBtn].forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(50)
+            }
         }
         
         habitLabel.snp.makeConstraints{
@@ -113,8 +137,19 @@ class AddView: UIView {
             $0.top.equalTo(habitField.snp.bottom).offset(15)
         }
         
-        horizontalStackView.snp.makeConstraints{
+        daysBtnStackView.snp.makeConstraints{
             $0.top.equalTo(dayLabel.snp.bottom).offset(15)
+            $0.leading.equalToSuperview().offset(12)
+            $0.trailing.equalToSuperview().offset(-12)
+        }
+        
+        weekLabel.snp.makeConstraints {
+            $0.leading.equalTo(habitLabel.snp.leading)
+            $0.top.equalTo(daysBtnStackView.snp.bottom).offset(15)
+        }
+        
+        weekBtnStackView.snp.makeConstraints{
+            $0.top.equalTo(weekLabel.snp.bottom).offset(15)
             $0.leading.equalToSuperview().offset(12)
             $0.trailing.equalToSuperview().offset(-12)
         }
