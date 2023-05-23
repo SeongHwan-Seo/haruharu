@@ -30,6 +30,7 @@ class AddViewController: UIViewController {
     }
     
     private func bind() {
+        
         addView.habitField.rx.text.orEmpty
             .bind(to: viewModel.habitText)
             .disposed(by: disposeBag)
@@ -37,24 +38,50 @@ class AddViewController: UIViewController {
         addView.hundredBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.divideButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
+                self.divideDaysButtonState(thirtyDay: false, fiftyDay: false, hundredDay: true)
                 self.viewModel.selectedDay.onNext(100)
             })
             .disposed(by: disposeBag)
         addView.thirtyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.divideButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
+                self.divideDaysButtonState(thirtyDay: true, fiftyDay: false, hundredDay: false)
                 self.viewModel.selectedDay.onNext(30)
             })
             .disposed(by: disposeBag)
         addView.fiftyBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                self.divideButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
+                self.divideDaysButtonState(thirtyDay: false, fiftyDay: true, hundredDay: false)
                 self.viewModel.selectedDay.onNext(50)
             })
             .disposed(by: disposeBag)
+        
+        // weekbtn tap event
+//        for button in weekBtns {
+//            button.rx.tap
+//                .scan(false) { acc, _ in !acc }
+//                .subscribe(onNext: { [weak self] val in
+//                    guard let self = self else { return }
+//                    self.divideWeekButtonState(button: button, isSelected: val)
+//
+//                    var newArray = self.viewModel.selectedWeek.value
+//                    guard let selectedRowValue = button.weekSelect?.rawValue else { return }
+//
+//                    if val { //btn isSelected true
+//                        newArray.append(selectedRowValue)
+//                        self.viewModel.selectedWeek.accept(newArray)
+//                    }
+//                    else { //btn isSelected false
+//                        if let index = newArray.firstIndex(of: selectedRowValue) {
+//                            newArray.remove(at: index) // 배열에서 요소 제거
+//                        }
+//
+//                        self.viewModel.selectedWeek.accept(newArray)
+//                    }
+//                })
+//                .disposed(by: disposeBag)
+//        }
         
         Observable.combineLatest(viewModel.isSelectedDay,  viewModel.isHabitVaild, resultSelector: { $0 && $1 })
             .subscribe(onNext: { [weak self] value in
@@ -77,9 +104,13 @@ class AddViewController: UIViewController {
             .disposed(by: disposeBag)
     }
     
-    private func divideButtonState(thirtyDay: Bool, fiftyDay: Bool, hundredDay: Bool) {
+    private func divideDaysButtonState(thirtyDay: Bool, fiftyDay: Bool, hundredDay: Bool) {
         addView.thirtyBtn.isSelected = thirtyDay
         addView.fiftyBtn.isSelected = fiftyDay
         addView.hundredBtn.isSelected = hundredDay
+    }
+    
+    private func divideWeekButtonState(button: WeekButton, isSelected: Bool) {
+        button.isSelected = isSelected
     }
 }

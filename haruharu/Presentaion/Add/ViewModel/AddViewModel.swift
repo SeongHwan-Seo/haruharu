@@ -33,6 +33,7 @@ class AddViewModel {
             .map { $0 > 0}
             .bind(to: isSelectedDay)
             .disposed(by: disposeBag)
+        
     }
     
     func addHabit(habitName: String, goalDay: Int) {
