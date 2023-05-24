@@ -11,14 +11,21 @@ import RxSwift
 import RxCocoa
 import RealmSwift
 
+protocol TimePickerPopupDelegate: AnyObject {
+    func didSelectTime(date: Date)
+}
+
 
 class DetailViewController: UIViewController, UIScrollViewDelegate {
     let userNotificationCenter = UNUserNotificationCenter.current()
     let haticManager = HapticManager.instance
+    var selectTime: String?
+    
     let sectionInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     let disposeBag = DisposeBag()
     
     let viewModel = DetailViewModel()
+  
     
     lazy var deleteBtn: UIButton = {
         let btn = UIButton(type: .system)
@@ -51,6 +58,10 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        print("#DetailViewController - deinit")
+    }
+    
     override func loadView() {
         self.view = detailView
     }
@@ -58,7 +69,7 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
     private func bind() {
         guard let habit = self.habit else { return }
         
-        viewModel.isComplete(habit: habit)
+        viewModel.setIsCompleteGoal(habit: habit)
         
         deleteBtn.rx.tap
             .subscribe(onNext: { [weak self] in
@@ -188,26 +199,22 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
                 
-                let timePickerPopupVC = TimePickerPopupViewController()
+                let timePickerPopupVC = TimePickerPopupViewController(viewModel: self.viewModel, delegate: self)
                 timePickerPopupVC.modalPresentationStyle = .overFullScreen
                 
-                timePickerPopupVC.confirmBtnCompletionClosure = {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "HHmm"
-                    dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+                timePickerPopupVC.confirmBtnCompletionClosure = { [weak self] in
+                    guard let self = self, let selectTime = self.selectTime else { return }
                     
-                    let time = dateFormatter.string(from: timePickerPopupVC.timePicker.date)
-                    
-                    self.detailView.detailHeaderView.alarmSubLabel.text = "매일 \(time.prefix(2))시 \(time.suffix(2))분 하루 알림"
-                    
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "매일 \(selectTime.prefix(2))시 \(selectTime.suffix(2))분 하루 알림"
+
                     var dateComponents = DateComponents()
                     dateComponents.calendar = Calendar.current
-                    
-                    dateComponents.hour = Int(time.prefix(2))
-                    dateComponents.minute = Int(time.suffix(2))
-                    
+
+                    dateComponents.hour = Int(selectTime.prefix(2))
+                    dateComponents.minute = Int(selectTime.suffix(2))
+
                     self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
-                    self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: time)
+                    self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: selectTime)
                 }
                 self.present(timePickerPopupVC, animated: false)
             })
@@ -217,9 +224,20 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         viewModel.isCompletedGoal
             .subscribe(onNext: { [weak self] value in
                 guard let self = self else { return }
-                self.detailView.detailHeaderView.chkBtn.isEnabled = !value
-                self.detailView.detailHeaderView.alarmSubLabel.text = "하루습관 목표 달성!"
-                self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = !value
+                if value {
+                    
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "하루습관 목표 달성!"
+                    self.detailView.detailHeaderView.alarmChangeBtn.isEnabled = !value
+                }
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.isCompletedDay
+            .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
+                if value {
+                    self.detailView.detailHeaderView.chkBtn.isEnabled = !value
+                }
             })
             .disposed(by: disposeBag)
     }
@@ -264,3 +282,13 @@ extension DetailViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+extension DetailViewController: TimePickerPopupDelegate {
+    
+    func didSelectTime(date: Date) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HHmm"
+        dateFormatter.timeZone = TimeZone(abbreviation: "KST")
+        
+        selectTime = dateFormatter.string(from: date)
+    }
+}

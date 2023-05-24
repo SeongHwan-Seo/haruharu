@@ -16,8 +16,20 @@ class DetailViewModel {
     let db = DatabaseManager.shared
     let disposeBag = DisposeBag()
     
+    //input
+    let selectedWeek = BehaviorRelay<[WeekSelect.RawValue]>(value: [])
+    
     //output
-    let isCompletedGoal = BehaviorRelay(value: false)
+    let isCompletedGoal = BehaviorRelay(value: false) // 목표일수 달성
+    let isCompletedDay = BehaviorRelay(value: false) // 오늘목표 달성
+    let isSelectedWeek = BehaviorRelay(value: false) // 반복 요일을 선택했는지
+    
+    init() {
+        _ = selectedWeek
+            .map { $0.count > 0 }
+            .bind(to: isSelectedWeek)
+            .disposed(by: disposeBag)
+    }
     
     func deleteHabit(id: ObjectId) {
         db.deleteHabit(id: id)
@@ -34,17 +46,18 @@ class DetailViewModel {
         db.updateHabitAlarm(id: id, isAlarm: isAlarm, alarmTime: alarmTime)
     }
     
-    func isComplete(habit: Habit) {
+    func setIsCompleteGoal(habit: Habit) {
         let isCompleted = {
             return habit.startDays.toArray().count == habit.goalDay ? true : false
         }
-        
         isCompletedGoal.accept(isCompleted())
         
-        if isCompleted() {
-            isCompletedGoal.accept(isCompleted())
-        } else {
-            isCompletedGoal.accept(habit.startDays.toArray().map { $0.startedDay}.contains(Date().toString()))
+        setIsCompleteDay(habit: habit)
+    }
+    
+    func setIsCompleteDay(habit: Habit) {
+        if isCompletedGoal.value || habit.startDays.toArray().map({ $0.startedDay}).contains(Date().toString()) {
+            isCompletedDay.accept(true)
         }
     }
     
