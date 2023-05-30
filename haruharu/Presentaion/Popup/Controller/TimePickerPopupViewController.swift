@@ -24,6 +24,7 @@ class TimePickerPopupViewController: UIViewController {
         
         self.view.backgroundColor = .black.withAlphaComponent(0.6)
         setLayout()
+        setAttribute()
         bind()
     }
     
@@ -56,6 +57,8 @@ class TimePickerPopupViewController: UIViewController {
     lazy var thursdayBtn = WeekButton(weekSelect: .thursday)
     lazy var fridayBtn = WeekButton(weekSelect: .friday)
     lazy var saturdayBtn = WeekButton(weekSelect: .saturday)
+    
+    
     lazy var weekBtnStackView: UIStackView = {
         let view = UIStackView(arrangedSubviews: [sundayBtn, mondayBtn, tuesdayBtn, wednesdayBtn, thursdayBtn, fridayBtn, saturdayBtn])
         
@@ -101,13 +104,15 @@ class TimePickerPopupViewController: UIViewController {
         let touch = touches.first
         guard let location = touch?.location(in: self.view) else { return }
         if !self.contentView.frame.contains(location) { 
-            
+            self.delegate?.resetSelectDays()
             self.dismiss(animated: false)
         }
     }
     
     private func bind() {
         let weekBtns: [WeekButton] = [sundayBtn, mondayBtn, tuesdayBtn, wednesdayBtn, thursdayBtn, fridayBtn, saturdayBtn]
+        var selectedDays = self.viewModel?.selectedWeek.value
+        
         
         confirmBtn.rx.tap
             .subscribe(onNext: { [weak self] in
@@ -121,38 +126,48 @@ class TimePickerPopupViewController: UIViewController {
             })
             .disposed(by: disposeBag)
         
+        
         self.viewModel?.isSelectedWeek
             .subscribe(onNext: { [weak self] val in
                 guard let self = self else { return }
                 self.confirmBtn.isEnabled = val
             })
             .disposed(by: disposeBag)
-
-//         weekbtn tap event
+        
+        self.viewModel?.selectedWeek
+            .subscribe(onNext: { val in
+                print(val)
+            })
+            .disposed(by: disposeBag)
+       
         for button in weekBtns {
             button.rx.tap
-                .scan(false) { acc, _ in !acc }
+                .flatMapLatest { [weak button] _ -> Observable<Bool> in
+                            guard let button = button else { return Observable.just(false) }
+                            return Observable.just(!button.isSelected)
+                        }
                 .subscribe(onNext: { [weak self, weak button] val in
                     guard let self = self, let button = button else { return }
                     self.divideWeekButtonState(button: button, isSelected: val)
 
-                    var newArray = self.viewModel?.selectedWeek.value
+                    
                     guard let selectedRowValue = button.weekSelect?.rawValue else { return }
 
                     if val { //btn isSelected true
-                        newArray?.append(selectedRowValue)
-                        self.viewModel?.selectedWeek.accept(newArray ?? [])
+                        selectedDays?.append(selectedRowValue)
+                        
+                        self.viewModel?.selectedWeek.accept(selectedDays ?? [])
                     }
                     else { //btn isSelected false
-                        if let index = newArray?.firstIndex(of: selectedRowValue) {
-                            newArray?.remove(at: index) // 배열에서 요소 제거
+                        if let index = selectedDays?.firstIndex(of: selectedRowValue) {
+                            selectedDays?.remove(at: index) // 배열에서 요소 제거
                         }
-
-                        self.viewModel?.selectedWeek.accept(newArray ?? [])
+                        self.viewModel?.selectedWeek.accept(selectedDays ?? [])
                     }
                 })
                 .disposed(by: disposeBag)
         }
+        
     }
     
     private func setLayout() {
@@ -194,6 +209,15 @@ class TimePickerPopupViewController: UIViewController {
             $0.top.equalTo(timePicker.snp.bottom).offset(10)
             $0.leading.trailing.bottom.equalToSuperview().inset(20)
             $0.height.equalTo(55)
+        }
+    }
+    
+    private func setAttribute() {
+        let weekBtns: [WeekButton] = [sundayBtn, mondayBtn, tuesdayBtn, wednesdayBtn, thursdayBtn, fridayBtn, saturdayBtn]
+        guard let selectedBtn = viewModel?.selectedWeek.value else { return }
+        
+        for rowValue in selectedBtn {
+            weekBtns[rowValue - 1].isSelected = true
         }
     }
     

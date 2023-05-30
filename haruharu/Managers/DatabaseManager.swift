@@ -32,12 +32,29 @@ class DatabaseManager {
         
         try! realm.write {
             realm.add(habit)
-            
         }
         
     }
     
-    func addHabitDetail(id: ObjectId) {
+    func createUser(_ name: String, _ createdDate: String) {
+        let user = User()
+        user.name = name
+        user.createdDate = createdDate
+        
+        try! realm.write {
+            realm.add(user)
+        }
+    }
+    
+    func editUserName(id: ObjectId, name: String) {
+        if let editUser = realm.objects(User.self).filter(NSPredicate(format: "_id = %@", id)).first{
+            try! realm.write{
+                editUser.name = name
+            }
+        }
+    }
+    
+    func addHabitDetail(id: ObjectId) -> Bool {
         if let updateObj = realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id)).first{
             try! realm.write{
                 guard let statedDay = Date().toString() else { return }
@@ -46,21 +63,34 @@ class DatabaseManager {
                 detail.check = true
                 detail.startedDay = statedDay
                 updateObj.startDays.append(detail)
+                
+                
+            }
+            if updateObj.startDays.count == updateObj.goalDay {
+                return true
+            }
+        } else{
+            print("Error")
+        }
+        
+        return false
+        
+    }
+    
+    func updateHabitAlarm(id: ObjectId, isAlarm: Bool, alarmTime: String, alarmDays: List<Int>) {
+        if let updateObj = realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id)).first{
+            try! realm.write{
+                updateObj.isAlarm = isAlarm
+                updateObj.alarmTime = alarmTime
+                updateObj.alarmDays = alarmDays
             }
         } else{
             print("Error")
         }
     }
     
-    func updateHabitAlarm(id: ObjectId, isAlarm: Bool, alarmTime: String) {
-        if let updateObj = realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id)).first{
-            try! realm.write{
-                updateObj.isAlarm = isAlarm
-                updateObj.alarmTime = alarmTime
-            }
-        } else{
-            print("Error")
-        }
+    func fetchHabit(id: ObjectId) -> Results<Habit> {
+        return realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id))
     }
     
     func fetchHabits() -> Results<Habit> {
@@ -68,9 +98,10 @@ class DatabaseManager {
         return realm.objects(Habit.self)
     }
     
-    func fetchHabit(id: ObjectId) -> Results<Habit> {
-        return realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id))
+    func fetchUser() -> Results<User> {
+        return realm.objects(User.self)
     }
+    
     
     func deleteHabit(id: ObjectId) {
         if let delete = realm.objects(Habit.self).filter(NSPredicate(format: "_id = %@", id)).first{

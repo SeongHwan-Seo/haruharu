@@ -66,6 +66,7 @@ class DeletePopupViewController: UIViewController {
     
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        print("#DeletePopupViewController - init")
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         
         self.view.backgroundColor = .black.withAlphaComponent(0.6)
@@ -73,7 +74,9 @@ class DeletePopupViewController: UIViewController {
         bind()
     }
     
-    
+    deinit {
+        print("#DeletePopupViewController - deinit")
+    }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
