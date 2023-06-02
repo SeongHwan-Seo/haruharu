@@ -11,7 +11,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-class HabitListView: UIView, UITableViewDelegate {
+class HabitListView: UIView {
     lazy var tableView: UITableView = {
         let tableView = UITableView()
         
@@ -37,7 +37,6 @@ class HabitListView: UIView, UITableViewDelegate {
     
     private func setAttribute() {
         tableView.register(HabitListViewCell.self, forCellReuseIdentifier: HabitListViewCell.identifier)
-        tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = .bgColor
         tableView.rowHeight = 140

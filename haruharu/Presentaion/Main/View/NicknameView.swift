@@ -15,7 +15,6 @@ class NicknameView: UIView {
     lazy var nicknameLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 2
-        label.text = "\(UserDefaults.standard.string(forKey: "nickname")  ?? "zzzz")의  \n하루하루"
         label.font = UIFont(name: "NanumGothicBold", size: 22)
         return label
     }()
