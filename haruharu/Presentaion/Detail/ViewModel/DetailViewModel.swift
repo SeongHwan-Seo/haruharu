@@ -32,7 +32,9 @@ class DetailViewModel {
         Observable.changeset(from: habit)
             .subscribe(onNext: { [weak self] array, changes in
                 guard let self = self else { return }
-                self.habit.accept(array.toArray()[0])
+                if !array.toArray().isEmpty {
+                    self.habit.accept(array.toArray()[0])
+                }
             })
             .disposed(by: disposeBag)
         
