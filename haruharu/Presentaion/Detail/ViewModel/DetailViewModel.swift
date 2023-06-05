@@ -58,6 +58,8 @@ class DetailViewModel {
                 return "주말"
             } else if sortedArray == [2, 3, 4, 5, 6] {
                 return "평일"
+            } else if sortedArray == [1, 2, 3, 4, 5, 6, 7]{
+                return "매일"
             } else {
                 let weekdays = sortedArray.map { weekday in
                     switch weekday {

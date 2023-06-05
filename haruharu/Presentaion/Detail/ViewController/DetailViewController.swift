@@ -201,6 +201,20 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
             })
             .disposed(by: disposeBag)
         
+        viewModel.habit
+            .subscribe(onNext: { [weak self] value in
+                guard let self = self else { return }
+                if !habit.isAlarm {
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "알림을 켜주세요."
+                } else if habit.alarmDays.toArray().isEmpty {
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "알림요일과 시간을 설정해주세요."
+                }
+                
+                if habit.isAlarm && !habit.alarmDays.toArray().isEmpty {
+                    self.detailView.detailHeaderView.alarmSubLabel.text = "\(self.viewModel.selectedDaysName.value) \(habit.alarmTime.prefix(2))시 \(habit.alarmTime.suffix(2))분 하루 알림"
+                }
+            })
+            .disposed(by: disposeBag)
         
         detailView.detailHeaderView.alarmChangeBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
@@ -211,8 +225,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                 
                 timePickerPopupVC.confirmBtnCompletionClosure = { [weak self] in
                     guard let self = self, let selectTime = self.selectTime else { return }
-                    
-                    self.detailView.detailHeaderView.alarmSubLabel.text = "\(self.viewModel.selectedDaysName.value) \(selectTime.prefix(2))시 \(selectTime.suffix(2))분 하루 알림"
 
                     var dateComponents = DateComponents()
                     dateComponents.calendar = Calendar.current
@@ -220,7 +232,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
                     guard let hour = Int(selectTime.prefix(2)) else { return }
                     guard let minute = Int(selectTime.suffix(2)) else { return }
 
-                    //self.viewModel.addNotificationRequest(by: dateComponents, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
                     self.viewModel.addNotificationRequest(days: self.viewModel.selectedWeek.value, hour: hour, minute: minute, id: self.habit!._id.stringValue, habitName: self.habit!.habitName)
                     self.viewModel.updateHabitAlarm(id: self.habit!._id, isAlarm: true, alarmTime: selectTime)
                 }
@@ -262,7 +273,6 @@ class DetailViewController: UIViewController, UIScrollViewDelegate {
         detailView.detailHeaderView.dateLabel.text = "\(createdDate) ~"
  
         detailView.detailHeaderView.alarmSwitch.setOn(habit.isAlarm, animated: false)
-        detailView.detailHeaderView.alarmSubLabel.text = "\(self.viewModel.selectedDaysName.value) \(habit.alarmTime.prefix(2))시 \(habit.alarmTime.suffix(2))분 하루 알림"
         
     }
     
