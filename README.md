@@ -42,3 +42,11 @@
 > open
 #### v1.0.1 (2023. 03. 10)
 > Fix: Alarm bug
+#### v1.0.2 (2023. 03. 15)
+> Change HabitDetail UI
+> 
+> Change maxlength of habitname
+#### v1.1.0 (2023. 06. 05)
+> Add a notification cycle selection feature
+>
+> Add Haptic Features
