@@ -10,15 +10,20 @@ import Foundation
 import RxSwift
 import RxRealm
 
-class DatabaseManager {
-    static let shared = DatabaseManager()
+class DatabaseManager: DatabaseManagerProtocol {
+    //static let shared = DatabaseManager()
     
-    private let realm = try! Realm()
+    //let realm = try! Realm()
+    private let realm: Realm
     
+    init(config: Realm.Configuration? = nil) {
+        if let config = config {
+            self.realm = try! Realm(configuration: config)
+        } else {
+            self.realm = try! Realm()
+        }
+    }
     
-    // MARK: - Lifecycle
-    
-    private init() {}
     
     func createHabit(_ habitName: String, _ goalDay: Int, _ createdDate: String, _ startDays: List<HabitDetail>) {
         
