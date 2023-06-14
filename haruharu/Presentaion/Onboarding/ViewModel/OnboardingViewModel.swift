@@ -20,9 +20,11 @@ class OnboardingViewModel {
     let isHabitVaild = BehaviorSubject(value: false)
     let isSelectedDay = BehaviorSubject(value: false)
     
+    let db: DatabaseManagerProtocol
+    
     let disposeBag = DisposeBag()
     
-    init() {
+    init(db: DatabaseManagerProtocol = DatabaseManager()) {
         _ = nicknameText.distinctUntilChanged()
             .map{ $0.count > 1 && $0.count < 9}
             .bind(to: isNicknameVaild)
@@ -39,30 +41,22 @@ class OnboardingViewModel {
             .bind(to: isSelectedDay)
             .disposed(by: disposeBag)
         
+        self.db = db
     }
     
     func createHaibit(habitName: String, goalDay: Int) {
-        
-        let db = DatabaseManager.shared
-        
         guard let createdDate = Date().toString() else { return }
         let habitDeatil = List<HabitDetail>()
         db.createHabit(habitName, goalDay, createdDate, habitDeatil)
     }
     
     
-    
-    /// 유저디폴트 닉네임 저장
-    /// - Parameter nickname: 닉네임
     func createUser(_ nickname: String, createdDate: String) {
-        let db = DatabaseManager.shared
-        
         db.createUser(nickname, createdDate)
     }
     
     func setIsFirst() {
         UserDefaults.standard.set(true, forKey: "isFirst")
     }
-    
     
 }

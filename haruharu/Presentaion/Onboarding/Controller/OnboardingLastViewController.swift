@@ -188,13 +188,11 @@ extension OnboardingLastViewController {
         startBtn.rx.tap
             .subscribe(onNext: { [weak self] _ in
                 guard let self = self else { return }
-                // Realm 파일 위치
                
                 do {
                     try self.viewModel.createHaibit(habitName: self.viewModel.habitText.value(), goalDay: self.viewModel.selectedDay.value())
                     try self.viewModel.createUser(self.viewModel.nicknameText.value(), createdDate: Date().toString()!)
                     self.viewModel.setIsFirst()
-                    
                     
                     let vc = MainViewController()
                     let navigationViewController = NavigationController(rootViewController: vc)
